@@ -1,9 +1,9 @@
 
 ####Travaux pratiques dans le cadre du cours Systèmes et réseaux
 
-**Pour tester ** : 
+**Pour tester** : 
 
-* télécharger un des fichiers **sample*.txt** dans le répertoire **other**
+* télécharger un des fichiers **sample*.txt** dans le répertoire [other](https://github.com/hetica/myvaf/tree/master/other)
 * puis aller sur : <http://jebimoh.fr>
 
 
