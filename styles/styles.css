@@ -1,0 +1,251 @@
+
+@font-face {
+	font-family: 'caviardreams' ;
+	src: url('/static/fonts/caviar_dreams/CaviarDreams.ttf') format('truetype');
+	font-weight: normal ;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'caviardreams' ;
+	src: url('/static/fonts/caviar_dreams/CaviarDreams_Bold.ttf') format('truetype');
+	font-weight: bold ;
+	font-style: normal;
+}
+
+
+html {
+    font-family: sans-serif;
+    //font-family: Courier,monospace ;
+    //font-weight: bold ;	
+}
+
+
+h1 { color: #CB0000; font-family: caviardreams, Courier,monospace; font-weight: bold; font-size: 2.3em ; margin: 5px ;}
+h2 { color: #CB0000 ; font-family: caviardreams; }
+h3 { color: #CB0000 ; font-family: caviardreams ; }
+h4 { color: #CB0000 ; font-family: caviardreams ; }
+h5 { color: #CB0000 ; font-family: caviardreams ; }
+p  { color: #3D3D3D	; }
+pre {color: #3D3D3D; font-size: 1.1em ; } 
+
+body {
+	background: url('/static/img/back.jpg') ;
+	width: 80% ;
+	margin: auto ;
+	min-width: 900px ;
+}	
+
+#bloc_page {
+	width: 85% ;
+	min-width: 840px ;
+	margin: auto ;
+}
+
+header {
+	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
+	//background: linear-gradient( #E8E9EB, #D2F3CB  ) ;
+	//background: linear-gradient( #00CB76, #0076CB  ) ;
+	//background: url("img/carte_marine1_v5.png");
+	border: solid 1px green;
+	padding-top: 10px ;
+	padding-bottom: 10px ;
+	padding-left: 35px ;
+	margin-top: 15px ;
+	margin-bottom: 50px ;
+	//text-align: center ;
+	border-radius: 0 0 0 50px ;
+	box-shadow: 0 0 8px rgba(75, 160, 85, 0.7) ;
+}
+
+header a {
+	text-decoration: none;
+	//font-weight: bold ;	
+}
+
+#name {
+	display: inline-block ;
+	width: 30% ;
+	vertical-align: top ;
+	//padding-left: 3%;
+	text-align: center ;
+	color: #191685 ;
+}
+
+#prof {
+	display: inline-block ;
+	width: 68% ;
+	vertical-align: top ;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 20px ;
+}
+
+nav
+{
+	display: inline-block ;
+	vertical-align: bottom ;
+	text-align: right;
+	width: 100% ;
+}
+
+nav ul { 
+	margin-bottom: 0; 
+}
+
+nav li
+{
+	display: inline-block;
+	margin-right: 15px;
+	margin-bottom: 9px;
+}
+
+nav a 
+{
+	text-decoration: none;
+	font-size: large;
+	//font-weight: bold ;	
+	//color: #FFFFFF;
+	padding: 10px;
+	color: #1E7A16;
+	border-radius: 10px 10px 0 0 ;
+	transition: background 1.7s ;
+	background-position: 0 42px;
+}
+
+nav a:hover,
+nav a:focus {
+	background: #4e9a06;
+	color: #FFFFFF
+}
+
+section {
+	display: inline-block ;
+	vertical-align: top ;
+	width: 60% ;
+	// border-right: 1px groove; 
+}
+
+
+article a {
+	text-decoration: none ;
+	color: #3D3D3D	;
+	padding: 2px 10px 2px 10px ;
+	border-radius: 10px ;
+	transition: background 1s ;
+}
+
+article a:hover {
+	color: #FFFFFF ;
+	background: #7D7D7D ;
+}
+
+#tableau_cours {
+	display: table ;
+}
+
+.titre_tableau {
+	display: table-caption
+}
+
+.ligne_cours {
+	display: table-row;
+	height: 32px ;
+}
+
+.ligne_cours p {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.cell_icone {
+	width: 30px;
+}
+
+pre {
+	font-family: sans-serif;
+	font-size: 0.95em;
+}
+
+aside {
+	display: inline-block ;
+	margin-top: 20px;
+	vertical-align: top ;
+	width: 39% ;
+}
+
+aside .infos {
+	//display: inline-block;
+	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
+	border: 1px groove green ;
+	border-radius: 10px ;
+	box-shadow: 0 0 8px rgba(75, 160, 85, 0.7) ;
+	margin: 20px 10px ; 
+	padding: 7px ;
+	color: #3D3D3D ;
+	opacity: 0.8;
+}
+
+aside .infos:hover {
+	opacity: 1;
+}
+
+aside .infos p {
+	text-align: justify ;
+}
+
+aside .infos p,
+aside .infos ul {
+	margin-top: 4px;
+	margin-bottom: 4px ;
+}
+
+aside .infos a[href] {
+	color: #1E7A16 ;
+	text-decoration: none;
+}
+
+aside .infos a[href]:hover {
+	border-bottom: solid 1px ;
+	font-style: italic ;
+	//color: #CB0000 ;
+	//color: #FFF ;
+	//background: #7D7D7D ;
+}
+
+aside .image {
+	float: right ;
+	padding-left: 7px;
+}
+
+footer {
+	margin-top: 50px ;
+	text-align: center ;
+	font-style: italic;
+	color: #575856;
+	font-size: 0.8em ;
+}
+
+input[type=button] {
+    background: -moz-linear-gradient(#ffffff, #dfdfdf);
+    background: -ms-linear-gradient(#ffffff, #dfdfdf);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #dfdfdf));
+    background: -webkit-linear-gradient(#ffffff, #dfdfdf);
+    background: -o-linear-gradient(#ffffff, #dfdfdf);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf')";
+    background: linear-gradient(#ffffff, #dfdfdf);
+    border-radius: 10px ;
+	}
+
+input[type=submit] {
+    background: -moz-linear-gradient(#ffffff, #dfdfdf);
+    background: -ms-linear-gradient(#ffffff, #dfdfdf);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #dfdfdf));
+    background: -webkit-linear-gradient(#ffffff, #dfdfdf);
+    background: -o-linear-gradient(#ffffff, #dfdfdf);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf')";
+    background: linear-gradient(#ffffff, #dfdfdf);
+    border-radius: 10px ;
+	}
