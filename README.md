@@ -1,7 +1,13 @@
 
 ####Travaux pratiques dans le cadre du cours Systèmes et réseaux
 
-# MyVAF
+**Pour tester ** : 
+
+* télécharger un des fichiers **sample*.txt** dans le répertoire **other**
+* puis aller sur : <http://jebimoh.fr>
+
+
+# MyVAF (Variant Allele Frequency)
 
 ## Description
 L'objectif est de fournir aux biologistes moléculaire un graphique du nombre des variants obtenus pour un échantillon.
@@ -22,8 +28,5 @@ En supléments aux fichier du site, il y a le répertoire **other** :
 * Le fichier **myvaf.conf** contient la configuration d'Apache
 
 
-**Pour tester ** : lien : <http://jebimoh.fr>
-
-(Ne pas oublier de télécharger un fichier sample.txt founi)
 
 

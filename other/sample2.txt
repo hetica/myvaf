@@ -1,0 +1,5 @@
+Gene	Variant sur génome g.	Variant sur CDS c.	Variant sur Protéine p. c.	VAF %
+ATM	Chr11 :108122758	C333G	H111P	23
+BIRC3	Chr11 :102210135	A66T	R22P	6
+TP53	Chr17 :7578554	T120G	W40S	15
+
