@@ -238,7 +238,7 @@ input[type=button] {
     border-radius: 10px ;
 	}
 
-input[type=submit] {
+input[type=submit], #upload_file {
     background: -moz-linear-gradient(#ffffff, #dfdfdf);
     background: -ms-linear-gradient(#ffffff, #dfdfdf);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #dfdfdf));
@@ -248,4 +248,7 @@ input[type=submit] {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf')";
     background: linear-gradient(#ffffff, #dfdfdf);
     border-radius: 10px ;
+    color:black ;
+    text-decoration:none ;
+    padding:1px 7px ;
 	}

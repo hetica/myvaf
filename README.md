@@ -28,5 +28,10 @@ En supléments aux fichier du site, il y a le répertoire **other** :
 * Le fichier **myvaf.conf** contient la configuration d'Apache
 
 
+## Prérequis pour le serveur
 
+* python3 avec les modules : 
+	* cgi
+	* cgitb
+	* cairosvg
 

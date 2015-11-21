@@ -3,7 +3,7 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 ///////////////////////////////////////////////////
 			POUR QUE CE SOIT FONCTIONNEL
 			
-() Pouvoir télécharger le(s) SVG(s)
+() Pouvoir télécharger le(s) graphique(s) (SVG ou PNG)
 (x) Mettre le site sur Internet
 
 ///////////////////////////////////////////////////
@@ -20,11 +20,15 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 
 () faire une page Web pour cette page
 () faire une page : (version, contributeurs, licence)
-() Améliorer le CSS du formulaire de téléchargement de fichiers
-() Cacher le bouton 'télécharger' lorsqu'uncun fichier n'est sélectionné
+() Améliorer le design CSS du formulaire de téléchargement de fichiers
+() Cacher le bouton 'télécharger' lorsqu'aucun fichier n'est sélectionné
 	--> javascript
 () Modifier la conf d'apache pour ne plus voir le chemin /cgi-bin
 	--> redirect / /cgi-bin/ ???
 () Afficher un message lorsque le format de fichier n'est pas bon.
 () Le lien "Fork me on github" doit s'ouvrir dans un autre onglet/fenêtre
-() Mettre le nom du fichier dans le liseré au lieu de "MyVAF"
+(x) Mettre le nom du fichier dans le liseré au lieu de "MyVAF"
+() Contrôler le format de fichier avant de le téléverser
+	--> Javascript
+() au lieu de télécharger le grahique depuis le serveur, le créer depuis le client à partir du code SVG
+	--> Javascript + DOM
