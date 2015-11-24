@@ -46,6 +46,7 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 	
 () au lieu de télécharger le grahique depuis le serveur, le créer depuis le client à partir du code SVG
 	--> Javascript + DOM
+<<<<<<< HEAD:TODO.md
 	
 (x) Mettre le nom du fichier dans le liseré au lieu de "MyVAF"
 
@@ -53,3 +54,9 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 ##			BUGS
 
 () si le fichier n'a pas de retour ligne, le programme plante
+=======
+
+///////////////////////////////////////////////////
+			BUGS
+() Le cgi plante si le fichier télécharger ne comporte pas de ligne vide à la fin
+>>>>>>> testing:TODO.md
