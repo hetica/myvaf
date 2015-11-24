@@ -3,8 +3,12 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 
 ##			POUR QUE CE SOIT FONCTIONNEL
 			
+<<<<<<< HEAD:TODO.md
 () Pouvoir télécharger le(s) graphique(s) (SVG ou PNG)
 
+=======
+(x) Pouvoir télécharger le(s) graphique(s) (SVG ou PNG)
+>>>>>>> testing:TODO
 (x) Mettre le site sur Internet
 
 

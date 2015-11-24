@@ -252,3 +252,7 @@ input[type=submit], #upload_file {
     text-decoration:none ;
     padding:1px 7px ;
 	}
+
+input[type="file"] {
+	padding-right: 100px ;
+	}

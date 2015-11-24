@@ -151,35 +151,37 @@ print("""content-type: text/html\n
 <!--#include virtual="/form1.html" -->
 """)
 
-if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
-	
-	fileitem = form['fichier_csv']
+try:
+	if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
+		
+		fileitem = form['fichier_csv']
 
-	# nom du fichier sans son extension	
-	fichier = fileitem.filename
-	for i,a in enumerate(fichier):
-		if a == ".": ind = i
-	fichier = fichier[:ind]
-	# nom et emplacement du graphique
-	png_path = "../graphics/" + fichier + ".png"
-	png_file = fichier + ".png"
-	
-	#print(fileitem)
-	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
-	
-	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
-	texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
-	if file_check_ok(texte):					# Si le controle du format de fichier est OK
-		texte = parse_file(texte)				# on analyse on fichier
-		positions = calcule_svg1(texte)			# on crée le fichier svg1
-		svg = affiche_svg1(positions)			# afficher svg
-		print(svg)
-		build_png(svg, png_path)
-		upload_png(png_path)
-		#debug(texte)							# pour debugguer
-		#affiche_env()							# affiche les variables d'environnement renvoyée par Apache
+		# nom du fichier sans son extension	
+		fichier = fileitem.filename
+		for i,a in enumerate(fichier):
+			if a == ".": ind = i
+		fichier = fichier[:ind]
+		# nom et emplacement du graphique
+		png_path = "../graphics/" + fichier + ".png"
+		png_file = fichier + ".png"
 		
+		#print(fileitem)
+		print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
+		texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
+		texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
+		if file_check_ok(texte):					# Si le controle du format de fichier est OK
+			texte = parse_file(texte)				# on analyse on fichier
+			positions = calcule_svg1(texte)			# on crée le fichier svg1
+			svg = affiche_svg1(positions)			# afficher svg
+			print(svg)
+			build_png(svg, png_path)
+			upload_png(png_path)
+			#debug(texte)							# pour debugguer
+			#affiche_env()							# affiche les variables d'environnement renvoyée par Apache
+			
+except:
+	pass		
 	
 print("""
 <!--#include virtual="/footer.html" -->
