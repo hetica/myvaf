@@ -17,6 +17,7 @@ form = cgi.FieldStorage()
 
 def file_check_ok(texte):
 	"""
+	Vérifier si la syntaxe du fichier est correcte
 	En entrée : le texte à controller
 	En sortie : vrai ou faux
 	"""
@@ -25,6 +26,11 @@ def file_check_ok(texte):
 	return True
 
 def parse_file(texte):
+	"""
+	découper le fichier en autant de lignes / champs
+	input : le fichier
+	output : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
+	"""
 	
 	texte = texte.split("\n")								# Sépare la chaine en liste de lignes
 
@@ -41,6 +47,11 @@ def parse_file(texte):
 	return texte
 
 def calcule_svg1(texte):
+	"""
+	Crée le fichier svg
+	input : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
+	output : String représentant le fichier SVG
+	"""
 
 	# les abcisses
 	abc1 = 100 ; abc2 = 560									# longueur utile de la barre des abcisses
@@ -74,23 +85,33 @@ def calcule_svg1(texte):
 	# calculer l'espace entre les lignes des abcisses
 	ea = (ord1 - ord2) / len(val_ord)	
 	
+	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
+	svg = '<?xml version="1.0" encoding="utf-8"?> '
+	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" '
+	svg += '"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> '
+	svg += '<svg width="620px" height="420px" xml:lang="fr" '
+	svg += 'xmlns="http://www.w3.org/2000/svg" '
+	svg += 'xmlns:xlink="http://www.w3.org/1999/xlink">'
+	svg += '<title>My VAF</title>'
+	
+	
 	# Cadre exterieur (en fonction de la définition de l'écran, avec un max et min)
-	pos = '<rect x="0" y="0" width="620" height="420" fill="white" opacity="0.7"/>'
+	svg += '<rect x="0" y="0" width="620" height="420" fill="white" opacity="0.7"/>'
 	# Position du liseré exterieur 
-	pos += '<path d="M 150,10 L 10,10 L 10,410 L 610,410 L 610,10 L 250,10" style="fill:none; stroke:grey;"/>'
+	svg += '<path d="M 150,10 L 10,10 L 10,410 L 610,410 L 610,10 L 250,10" style="fill:none; stroke:grey;"/>'
 	# texte du liseré
-	pos += '<text id="lisere1" x="160" y="15">' + fichier + '</text>'
+	svg += '<text id="lisere1" x="160" y="15">' + fichier + '</text>'
 	# ligne des abcisses
-	pos += '<line x1="' + str(abc1-5) +'" y1="330" x2="' + str(abc2+5) + '" y2="330" stroke="grey"/>'
+	svg += '<line x1="' + str(abc1-5) +'" y1="330" x2="' + str(abc2+5) + '" y2="330" stroke="grey"/>'
 	# ligne de base des ordonnées
-	pos += '<line x1="'+str(abc1)+'" y1="'+ str(ord1+5)+'" x2="'+str(abc1)+'" y2="'+str(ord2-5)+'" stroke="grey"/>'
-	pos += '<text x="'+str(abc1-10) + '" y="'+str(ord1+5) + '" style="text-anchor:end;">0 %</text>'
+	svg += '<line x1="'+str(abc1)+'" y1="'+ str(ord1+5)+'" x2="'+str(abc1)+'" y2="'+str(ord2-5)+'" stroke="grey"/>'
+	svg += '<text x="'+str(abc1-10) + '" y="'+str(ord1+5) + '" style="text-anchor:end;">0 %</text>'
 	# lignes intermédiaires des ordonnées
 	Y = ord1
 	for a in val_ord:
 		Y -= ea
-		pos += '<line x1="'+str(abc1-5) + '" y1="'+str(Y) + '" x2="' + str(abc2+5) + '" y2="'+str(Y) + '" stroke="#B3B3B3"/>'
-		pos += '<text x="'+str(abc1-10) + '" y="'+str(Y+5) + '" style="text-anchor:end; baseline-shift:5;">'+ str(a) +' %</text>'
+		svg += '<line x1="'+str(abc1-5) + '" y1="'+str(Y) + '" x2="' + str(abc2+5) + '" y2="'+str(Y) + '" stroke="#B3B3B3"/>'
+		svg += '<text x="'+str(abc1-10) + '" y="'+str(Y+5) + '" style="text-anchor:end; baseline-shift:5;">'+ str(a) +' %</text>'
 	# Position des barres
 	X = abc1
 	for a in (texte):
@@ -99,36 +120,51 @@ def calcule_svg1(texte):
 		else:											# sinon on décale de eb (ecart entre barre)
 			X = X + eb
 		Y2 = ord1 - (ord_t * int(a[4]) / vsup)
-		pos += '<line x1="'+str(X) + '" y1="'+str(ord1)+'" x2="'+str(X) + '" y2="'+ str(Y2) + '" style=" stroke:grey; stroke-width:15 "/>'
-		pos += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		#pos += '<ellipse cx="'+str(X+35)+'" cy="'+str(Y2-10)+'" rx="25" ry="15" style="fill:white;opacity:0.8;stroke-width:1;stroke:grey"/>'
-		pos += '<g fill="grey"><text x="'+str(X+35) + '" y="' + str(Y2-4) + '" style="text-anchor:middle" >' + a[3] + '</text></g>' 
+		svg += '<line x1="'+str(X) + '" y1="'+str(ord1)+'" x2="'+str(X) + '" y2="'+ str(Y2) + '" style=" stroke:grey; stroke-width:15 "/>'
+		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
+		#svg += '<ellipse cx="'+str(X+35)+'" cy="'+str(Y2-10)+'" rx="25" ry="15" style="fill:white;opacity:0.8;stroke-width:1;stroke:grey"/>'
+		svg += '<g fill="grey"><text x="'+str(X+35) + '" y="' + str(Y2-4) + '" style="text-anchor:middle" >' + a[3] + '</text></g>' 
 
-	return pos
+	svg += '</svg>'									# la fin du fichier SVG
+	return svg										# il ne reste plus qu'à retourner le fichier
 
-def affiche_svg1(positions):
-	svg = '<?xml version="1.0" encoding="utf-8"?> '
-	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" '
-	svg += '"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> '
-	svg += '<svg width="620px" height="420px" xml:lang="fr" '
-	svg += 'xmlns="http://www.w3.org/2000/svg" '
-	svg += 'xmlns:xlink="http://www.w3.org/1999/xlink">'
-	svg += '<title>My VAF</title>'
-	svg += positions
-	svg += '</svg>'
-	return svg
-
-def build_png(svg, png):
+def build_png_file(svg, png):
+	"""
+	Crée un fichier png pour le téléchargement
+	"""
+	
 	#png = cairosvg.svg2png(bytestring = svg)
 	cairosvg.svg2png(bytestring=bytes(svg,'UTF-8'), write_to = png)
+	print("<p>debug</p>")
 	#print("<br/>", png)
 
 def upload_png(png):
+	"""
+	Affiche le lien de téléchargement du fichier png
+	"""
 	# print("<p>"+png_file+"</p>")
 	print('<br /><a href="' + png + '" download="' + png_file + '" id="upload_file" >Télécharger le graphique<a>' )
 
 
+def build_svg_file(svgContent, svgFile):
+	"""
+	Crée un fichier svg pour le téléchargement
+	"""
+	with open(svgFile, 'w') as f:
+		f.write(svg)
+
+def upload_svg(svg):
+	"""
+	Affiche le lien de téléchargement du fichier svg
+	"""
+	# print("<p>"+png_file+"</p>")
+	print('<br /><a href="' + svg + '" download="' + svg_file + '" id="upload_file" >Télécharger le graphique<a>' )
+
+
 def debug(texte):
+	"""
+	Pour le debug
+	"""
 	print('<br/><h3>--- DEBUG ---</h3>')
 	# print(texte)										# Afficher la liste 'texte'
 	for i,line in enumerate(texte):						# afficher les éléments des éléments de 'texte'
@@ -137,6 +173,9 @@ def debug(texte):
 
 
 def affiche_env():
+	"""
+	Affiche les variables renvoyées par Apache
+	"""
 	print("<br/><h3>--- VARIABLES D'ENVIRONNEMENT ---</h3>")
 	for a,b in os.environ.items():
 		print("{} -> {}<br/>".format(a,b))
@@ -151,37 +190,40 @@ print("""content-type: text/html\n
 <!--#include virtual="/form1.html" -->
 """)
 
-try:
-	if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
+#try:
+if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
-		fileitem = form['fichier_csv']
+	fileitem = form['fichier_csv']
 
-		# nom du fichier sans son extension	
-		fichier = fileitem.filename
-		for i,a in enumerate(fichier):
-			if a == ".": ind = i
-		fichier = fichier[:ind]
-		# nom et emplacement du graphique
-		png_path = "../graphics/" + fichier + ".png"
-		png_file = fichier + ".png"
+	# définie le nom du fichier sans son extension	
+	fichier = fileitem.filename
+	for i,a in enumerate(fichier):
+		if a == ".": ind = i
+	fichier = fichier[:ind]
+	# définie le nom et emplacement du graphique png
+	png_path = "../graphics/" + fichier + ".png"
+	png_file = fichier + ".png"
+	# définie le nom et emplacement du graphique png
+	svg_path = "../graphics/" + fichier + ".svg"
+	svg_file = fichier + ".svg"	
+	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
-		#print(fileitem)
-		print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
-		
-		texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
-		texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
-		if file_check_ok(texte):					# Si le controle du format de fichier est OK
-			texte = parse_file(texte)				# on analyse on fichier
-			positions = calcule_svg1(texte)			# on crée le fichier svg1
-			svg = affiche_svg1(positions)			# afficher svg
-			print(svg)
-			build_png(svg, png_path)
-			upload_png(png_path)
-			#debug(texte)							# pour debugguer
-			#affiche_env()							# affiche les variables d'environnement renvoyée par Apache
+	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
+	texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
+	if file_check_ok(texte):					# Si le controle du format de fichier est OK
+		texte = parse_file(texte)				# on analyse on fichier
+		svg = calcule_svg1(texte)			# on crée le fichier svg1
+		#svg = affiche_svg1(positions)			# afficher svg
+		print(svg)
+		#build_png_file(svg, png_path)
+		#upload_png(png_path)
+		build_svg_file(svg, svg_path)
+		upload_svg(svg_path)
+		#debug(texte)							# pour debugguer
+		#affiche_env()							# affiche les variables d'environnement renvoyée par Apache
 			
-except:
-	pass		
+#except:
+#	pass		
 	
 print("""
 <!--#include virtual="/footer.html" -->
