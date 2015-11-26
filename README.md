@@ -1,16 +1,15 @@
 
-####Travaux pratiques dans le cadre du cours Systèmes et réseaux
+####Travaux pratiques dans le cadre du cours Système.
 
 **Pour tester** : 
 
-* télécharger un des fichiers **sample*.txt** dans le répertoire [other](https://github.com/hetica/myvaf/tree/master/other)
-* puis aller sur : <http://jebimoh.fr>
-
+* Se rendre sur : <http://jebimoh.fr>
+* télécharger le fichier d'exemple fourni en lien (sample.txt)
 
 # MyVAF (Variant Allele Frequency)
 
 ## Description
-L'objectif est de fournir aux biologistes moléculaire un graphique du nombre des variants obtenus pour un échantillon.
+L'objectif est de fournir aux biologistes moléculaires un graphique du pourcentage de variants obtenus pour un échantillon.
 Le biologiste utilise un fichier formaté ainsi :
 
 	Gene	Variant_sur_Génome_g.	Variant_sur_CDS_c.	Variant_sur_protéine_p_c.	VAF_%
@@ -26,7 +25,7 @@ Le biologiste utilise un fichier formaté ainsi :
 
 En supléments aux fichier du site, il y a le répertoire **other** :
 
-* Les fichiers **sample*.txt** sont des fichiers d'exemple à télécharger pour test
+* Les fichiers **sample*.txt** sont d'autre fichiers d'exemple à télécharger pour tester
 * Le fichier **jebimoh.conf** contient la configuration d'Apache2
 
 
