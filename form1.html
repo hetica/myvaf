@@ -1,11 +1,9 @@
 <form id="upload_form" enctype="multipart/form-data" method="post" action="/cgi-bin/index.py">
 	<label for="image_file">Sélectionner un fichier</label><br />
-
 	<input type="file" name="fichier_csv" id="fichier_csv" onchange="fileSelected();"/>
-	<span style="white-space='normal'" >     Un fichier d'exemple est disponible: </span>
+	<span style="white-space='normal'" >Un fichier d'exemple est disponible: </span>
 	<a href="/static/sample.txt" download="sample.txt" id="upload_file" >sample.txt</a>
-
-	<p><input type="submit" name="Submit" value="Télécharger" />
+	<p><input type="submit" name="Submit" value="Télécharger"/>
 	</p>
 </form>
 

@@ -44,12 +44,9 @@ body {
 
 header {
 	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
-	//background: linear-gradient( #E8E9EB, #D2F3CB  ) ;
-	//background: linear-gradient( #00CB76, #0076CB  ) ;
-	//background: url("img/carte_marine1_v5.png");
 	border: solid 1px green;
 	padding-top: 10px ;
-	padding-bottom: 10px ;
+	padding-bottom: 20px ;
 	padding-left: 35px ;
 	margin-top: 15px ;
 	margin-bottom: 50px ;
@@ -58,10 +55,21 @@ header {
 	box-shadow: 0 0 8px rgba(75, 160, 85, 0.7) ;
 }
 
+header h1 {
+	display: inline-block ;
+}
+
 header a {
 	text-decoration: none;
-	//font-weight: bold ;	
 }
+
+#doublehelix {
+	float: left ;
+	padding-top: 1px;
+	padding-right: 50px;
+	height: 70px ;
+}
+
 
 #name {
 	display: inline-block ;
@@ -252,6 +260,10 @@ input[type=submit], #upload_file {
     text-decoration:none ;
     padding:1px 7px ;
 	}
+
+input[type=submit] {
+	//display: none ;
+}
 
 input[type="file"] {
 	padding-right: 100px ;

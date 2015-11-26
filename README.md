@@ -13,7 +13,9 @@
 L'objectif est de fournir aux biologistes moléculaire un graphique du nombre des variants obtenus pour un échantillon.
 Le biologiste utilise un fichier formaté ainsi :
 
-	Gene	Variant_sur_Génome	Variant_sur_CDS_c.	Variant_sur_protéine_p_c	VAF_%
+	Gene	Variant_sur_Génome_g.	Variant_sur_CDS_c.	Variant_sur_protéine_p_c.	VAF_%
+	
+**Nota** : le séparateur de champs est une tabulation (et une seule).
 
 ## Objectifs
 * Utiliser python
@@ -25,7 +27,7 @@ Le biologiste utilise un fichier formaté ainsi :
 En supléments aux fichier du site, il y a le répertoire **other** :
 
 * Les fichiers **sample*.txt** sont des fichiers d'exemple à télécharger pour test
-* Le fichier **myvaf.conf** contient la configuration d'Apache
+* Le fichier **jebimoh.conf** contient la configuration d'Apache2
 
 
 ## Prérequis pour le serveur

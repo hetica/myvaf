@@ -1,3 +1,9 @@
+
+
+function showButton(target) {
+	document.getElementById(target).style.display = 'block';
+};
+
 // common variables
 var iBytesUploaded = 0;
 var iBytesTotal = 0;

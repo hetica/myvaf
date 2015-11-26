@@ -39,8 +39,10 @@ def parse_file(texte):
 	for i,line in enumerate(texte):							# supprime les lignes non conformes
 		if not "\t" in line:
 			del texte[i]
-		if line == '' or line == "\n":
-			del texte[i]
+		try:
+			if line == '': del texte[i]
+		except:
+			pass
 	for i,line in enumerate(texte):							# sépare les lignes en champs 
 		texte[i] = line.split("\t")
 		
@@ -52,7 +54,7 @@ def calcule_svg1(texte):
 	input : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
 	output : String représentant le fichier SVG
 	"""
-
+	################# ICI DEFINIT LES POINTS DU SVG #####################
 	# les abcisses
 	abc1 = 100 ; abc2 = 560									# longueur utile de la barre des abcisses
 	abc_t = abc2 - abc1										# longueur utile pour les abcisses
@@ -120,12 +122,20 @@ def calcule_svg1(texte):
 		else:											# sinon on décale de eb (ecart entre barre)
 			X = X + eb
 		Y2 = ord1 - (ord_t * int(a[4]) / vsup)
-		svg += '<line x1="'+str(X) + '" y1="'+str(ord1)+'" x2="'+str(X) + '" y2="'+ str(Y2) + '" style=" stroke:grey; stroke-width:15 "/>'
+		svg += '<line x1="'+str(X) + '" y1="'+str(ord1)+'" x2="'+str(X) + '" y2="'+ str(Y2) + '" style=" stroke:grey; stroke-width:15 ">'
+		svg += '<animate attributeName="y2" from="'+str(ord1)+'" to="'+str(Y2)+ '" begin="0s" dur="2s" />'
+		svg += '</line>'
 		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		#svg += '<ellipse cx="'+str(X+35)+'" cy="'+str(Y2-10)+'" rx="25" ry="15" style="fill:white;opacity:0.8;stroke-width:1;stroke:grey"/>'
-		svg += '<g fill="grey"><text x="'+str(X+35) + '" y="' + str(Y2-4) + '" style="text-anchor:middle" >' + a[3] + '</text></g>' 
+		svg += '<ellipse cx="'+str(X+36)+'" cy="'+str(Y2-12)+'" rx="32" ry="17" style="fill:white; opacity:0.8; stroke-width:1; stroke:grey"/>'
+		#svg += '<set attributeName="fill" to="white" begin="2" />'
+		#svg += '<set attributeName="stroke" to="grey" begin="2" /></ellipse>'
+		svg += '<text x="'+str(X+36) + '" y="' + str(Y2-6) + '" style="text-anchor:middle" fill="grey">' + a[3]
+		svg += '</text>'
+		#svg += '<set attributeName="fill" to="grey" begin="2" /></text>'
 
 	svg += '</svg>'									# la fin du fichier SVG
+	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
+	
 	return svg										# il ne reste plus qu'à retourner le fichier
 
 def build_png_file(svg, png):
@@ -190,7 +200,6 @@ print("""content-type: text/html\n
 <!--#include virtual="/form1.html" -->
 """)
 
-#try:
 if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
 	fileitem = form['fichier_csv']
@@ -212,18 +221,15 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
 		texte = parse_file(texte)				# on analyse on fichier
-		svg = calcule_svg1(texte)			# on crée le fichier svg1
-		#svg = affiche_svg1(positions)			# afficher svg
-		print(svg)
-		#build_png_file(svg, png_path)
-		#upload_png(png_path)
-		build_svg_file(svg, svg_path)
-		upload_svg(svg_path)
+		svg = calcule_svg1(texte)				# on crée le fichier svg1
+		print(svg)								# AFFICHER LE SVG
+		#build_png_file(svg, png_path)			# créer un fichier PNG (pas au point)
+		#upload_png(png_path)					# créer le lien de téléchargement de ce PNG
+		build_svg_file(svg, svg_path)			# créer un fichier SVG
+		upload_svg(svg_path)					# créer le lien de téléchargement de ce SVG
 		#debug(texte)							# pour debugguer
-		#affiche_env()							# affiche les variables d'environnement renvoyée par Apache
-			
-#except:
-#	pass		
+		#affiche_env()							# affiche les variables d'environnement renvoyées par Apache
+		
 	
 print("""
 <!--#include virtual="/footer.html" -->

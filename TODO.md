@@ -1,17 +1,6 @@
 Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améliorations à apporter. Bref, tout un tas de trucs qui ne seront peut être jamais fait
 
 
-##			POUR QUE CE SOIT FONCTIONNEL
-			
-<<<<<<< HEAD:TODO.md
-() Pouvoir télécharger le(s) graphique(s) (SVG ou PNG)
-
-=======
-(x) Pouvoir télécharger le(s) graphique(s) (SVG ou PNG)
->>>>>>> testing:TODO
-(x) Mettre le site sur Internet
-
-
 ##			POUR LE MASTER
 			
 () Afficher les valeurs au passage de la souris (onMouseOver ?) sur les barres 
@@ -19,12 +8,14 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 	
 () Faire un deuxième graphique avec plusieurs patients
 
-(x) Uploader sur github
-
 (x) 	et faire un lien hackme (en y ajoutant des samples pour tester)
 
 
 ##			POUR AMELIORER LE TRUC
+
+() Le graphique doit s'agrandir avec le nombre de barres
+
+() supporter les fichiers avec le point-virgule en délimiteur
 
 () faire une page Web pour cette page
 
@@ -40,23 +31,13 @@ Liste en vrac des fonctionnalités manquantes, des bug non corrigés, des améli
 	
 () Afficher un message lorsque le format de fichier n'est pas bon.
 
-() Le lien "Fork me on github" doit s'ouvrir dans un autre onglet/fenêtre
 () Contrôler le format de fichier avant de le téléverser
 	--> Javascript
 	
 () au lieu de télécharger le grahique depuis le serveur, le créer depuis le client à partir du code SVG
 	--> Javascript + DOM
-<<<<<<< HEAD:TODO.md
-	
-(x) Mettre le nom du fichier dans le liseré au lieu de "MyVAF"
-
+		
 
 ##			BUGS
 
-() si le fichier n'a pas de retour ligne, le programme plante
-=======
 
-///////////////////////////////////////////////////
-			BUGS
-() Le cgi plante si le fichier télécharger ne comporte pas de ligne vide à la fin
->>>>>>> testing:TODO.md
