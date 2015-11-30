@@ -181,7 +181,7 @@ print("""
 <h1>MyVAF</h1>
 <p>
 	Affiche un graphique de la fréquence des allèles variants pour un échantilon.<br/>
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample_myvaf.txt" download="sample.txt" id="upload_file" >sample.txt</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample_myvaf.txt" download="sample_myvaf.txt" id="upload_file" >sample_myvaf.txt</a>
 </p>
 <br />
 """)

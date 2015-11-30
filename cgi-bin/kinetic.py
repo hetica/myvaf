@@ -35,26 +35,27 @@ def calcule_svg1(texte):
 	input : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
 	output : String représentant le fichier SVG
 	"""
-	n_abc = len(texte) -1										# nombre de points d'abcisses
+	n_abc = len(texte) -1									# nombre de points d'abcisses
+	n_chemins = len(texte[0]) -1							# nombre de chemins (patients)
 	################# ICI ON DEFINIT LES POSITIONS MODULABLES DU GRAPHIQUE #####################
 	#ecart_abc = 70											# écart entre les points d'abcisses
 	#lrg_max = 600											# largeur max des abscisses
 	largeur = 550											# largeur du graphique
-	hauteur = 440											# hauteur du graphique
+	hauteur = 460											# hauteur du graphique
 	x1 = 0													# position gauche
 	y1 = 0													# position haute
 	#x2 = x1 + min(160 + ecart_abc * n_abc, lrg_max+150)	# position droite
 	x2 = x1 + largeur										# position droite
 	y2 = y1 + hauteur										# position basse
 	x_mid = (x2-x1)/2 + x1									# position axe vertical du graphique
-	y_abc = y1 + hauteur - 90								# position verticale de la barre des abcisses
+	y_abc = y1 + hauteur - 100								# position verticale de la barre des abcisses
 	x_ord = x1 + 100										# position horizontale de la barre des ordonnées
 	
 	################# ICI ON DEFINIT LES DIMENSIONS DES PARTIES DU SVG #####################
 	#l_abc = min(ecart__abc * n_abc, lrg_max)				# longueur de la barre utile des abcisses
 	l_abc = largeur - 150									# longueur de la barre utile des abcisses
 	e_abc = l_abc / n_abc 	 								# espaces entre les abcisses des points
-	l_ord = hauteur - 140									# longueur de la barre utile des ordonnées
+	l_ord = hauteur - 150									# longueur de la barre utile des ordonnées
 	grad = l_ord / 10										# ecart entre graduation des ordonnées
 	
 	################# ICI ON DEFINIT LES POINTS DU SVG #####################
@@ -66,20 +67,27 @@ def calcule_svg1(texte):
 	pos_abc = []														# liste des abcisses utilisées
 	x_text = []															# le texte des abcisses
 	col = 0																# numéro de colonne, la première colonne vaut 1
-	for i,a in enumerate(texte):										# chaque ligne du texte sera une colonne (abscisse)
-		col +=1
+	chemins = []
+	for i,a in enumerate(texte):										# pour chaque ligne du texte
+		col +=1	
 		line = 0
-		for j,b in enumerate(a):										# chaque colonne du texte correspond à une ligne du graphique
+		for j,b in enumerate(a):										# pour chaque champs de la ligne
 			line +=1
-			if j == 0 and col != 1:
-				if col == 2:
-					x_ech += e_abc / 2
-					pos_abc.append(x_ech)
-				else:
-					x_ech += e_abc
-					pos_abc.append(x_ech)
-				x_text.append(b) 
-	
+			if line == 1 and col != 1:									# Sur la première ligne moins le premier champs
+				if col == 2:											# si on est sur le deuxième champs
+					x_ech += e_abc / 2									# la première abcisse est situé à un demi écart type
+					pos_abc.append(x_ech)								# on stocke la valeur dans pos_abc[]
+				else:													# pour les autres champs (de la première ligne)
+					x_ech += e_abc										# on augmente la valeur de la position
+					pos_abc.append(x_ech)								# et on stocke la valeur dans pos_abc[]
+				x_text.append(b) 										# on stocke le contenu des en-tete dans x_text[]
+			else:
+				for k in range(1,n_chemins+1):
+					if col != 1:
+						print(a[k], "-")
+
+	print("<br/>col: ",col)
+	print("<br/>line: ",line)
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
 	svg = '<?xml version="1.0" encoding="utf-8"?> '
@@ -111,35 +119,8 @@ def calcule_svg1(texte):
 		svg += '<line x1="'+str(a) + '" y1="'+ords[1]+'" x2="'+str(a) + '" y2="'+ ords[3] + '" style=" stroke:#D9D9D9"/>'
 		# Le texte des abscisses
 		y_text = str(y_abc + 16)		# position verticale du texte
-		svg += '<text x="'+str(a+5)+'" y="'+y_text+'"  style="text-anchor:end" transform="rotate(-40,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
-		
-		
-		#print("<br/>pos a : ", a)
-	#print(pos_abc)
-	#print("ecart entre abcsisses : " , e_abc)
-	#print(col)	
-	#print(line)
-	#print(texte[col-1][line-1])
-	
-	"""
-	X = abc1
-	for a in (texte):
-		if X == abc1:									# compter 1/2 décalage pour la première barre 
-			X = X + eb / 2
-		else:											# sinon on décale de eb (ecart entre barre)
-			X = X + eb
-		Y2 = ord1 - (ord_t * int(a[4]) / vsup)
-		svg += '<line x1="'+str(X) + '" y1="'+str(ord1)+'" x2="'+str(X) + '" y2="'+ str(Y2) + '" style=" stroke:grey; stroke-width:15 ">'
-		svg += '<animate attributeName="y2" from="'+str(ord1)+'" to="'+str(Y2)+ '" begin="0s" dur="2s" />'
-		svg += '</line>'
-		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		#svg += '<ellipse cx="'+str(X+36)+'" cy="'+str(Y2-12)+'" rx="32" ry="17" style="fill:white; opacity:0.8; stroke-width:1; stroke:grey"/>'
-		#svg += '<set attributeName="fill" to="white" begin="2" />'
-		#svg += '<set attributeName="stroke" to="grey" begin="2" /></ellipse>'
-		svg += '<text x="'+str(X+36) + '" y="' + str(Y2-6) + '" style="text-anchor:middle" fill="grey">' + a[3]
-		svg += '</text>'
-		#svg += '<set attributeName="fill" to="grey" begin="2" /></text>'
-	"""
+		svg += '<text x="'+str(a+4)+'" y="'+y_text+'"  style="text-anchor:end" letter-spacing="15px" transform="rotate(-45,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
+
 	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
 	svg += '</svg>'									# la fin du fichier SVG
 	return svg										# il ne reste plus qu'à retourner le fichier
@@ -171,7 +152,7 @@ print("""
 <p>
 	Représente des fréquences alléliques variantes détectées  par patient, dans plusieurs échantillons séquentiels,
 	sous forme de graphique d'évolution clonale.<br/> 
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample_kinetic.csv" download="kinetic.csv" id="upload_file" >sample.txt</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample_kinetic.csv" download="sample_kinetic.csv" id="upload_file" >sample_kinetic.csv</a>
 </p>
 <br />
 """)
@@ -200,7 +181,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 		svg = calcule_svg1(texte)					# on crée le fichier svg1
 		print(svg)									# AFFICHER LE SVG
 		
-		debug(texte)								# pour debugguer
+		#debug(texte)								# pour debugguer
 
 		
 print("""
