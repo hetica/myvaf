@@ -62,13 +62,14 @@ def calcule_svg1(texte):
 	abc = [ str(x_ord-5), str(y_abc), str(x_ord+l_abc), str(y_abc) ]	# ligne des abcisses
 	ords = [ str(x_ord), str(y_abc+5), str(x_ord), str(y_abc-l_ord-5) ]	# ligne des ordonnées
 	### Déterminer la position des abcisses
-	x_ech = x_ord
-	pos_abc = []
-	col = 0
-	for i,a in enumerate(texte):
+	x_ech = x_ord														# abcisse a un instant T
+	pos_abc = []														# liste des abcisses utilisées
+	x_text = []															# le texte des abcisses
+	col = 0																# numéro de colonne, la première colonne vaut 1
+	for i,a in enumerate(texte):										# chaque ligne du texte sera une colonne (abscisse)
 		col +=1
 		line = 0
-		for j,b in enumerate(a):
+		for j,b in enumerate(a):										# chaque colonne du texte correspond à une ligne du graphique
 			line +=1
 			if j == 0 and col != 1:
 				if col == 2:
@@ -77,6 +78,8 @@ def calcule_svg1(texte):
 				else:
 					x_ech += e_abc
 					pos_abc.append(x_ech)
+				x_text.append(b) 
+	
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
 	svg = '<?xml version="1.0" encoding="utf-8"?> '
@@ -104,8 +107,13 @@ def calcule_svg1(texte):
 		svg += '<line x1="'+abc[0]+ '" y1="'+str(y_ech) + '" x2="' +abc[2]+ '" y2="'+str(y_ech) + '" stroke="#D9D9D9"/>'
 		svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_ech) + '" style="text-anchor:end; dominant-baseline:middle;">'+ str(a) +'</text>'
 	# Position des abcisses
-	for a in pos_abc:
+	for i, a in enumerate(pos_abc):
 		svg += '<line x1="'+str(a) + '" y1="'+ords[1]+'" x2="'+str(a) + '" y2="'+ ords[3] + '" style=" stroke:#D9D9D9"/>'
+		# Le texte des abscisses
+		y_text = str(y_abc + 16)		# position verticale du texte
+		svg += '<text x="'+str(a+5)+'" y="'+y_text+'"  style="text-anchor:end" transform="rotate(-40,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
+		
+		
 		#print("<br/>pos a : ", a)
 	#print(pos_abc)
 	#print("ecart entre abcsisses : " , e_abc)

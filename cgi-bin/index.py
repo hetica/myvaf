@@ -76,7 +76,7 @@ def calcule_svg1(texte):
 	
 	
 	# Cadre exterieur (en fonction de la définition de l'écran, avec un max et min)
-	svg += '<rect x="0" y="0" width="620" height="420" fill="white" opacity="0.7"/>'
+	svg += '<rect x="0" y="0" width="620" height="420" fill="white"/>'
 	# Position du liseré exterieur 
 	svg += '<path d="M 150,10 L 10,10 L 10,410 L 610,410 L 610,10 L 250,10" style="fill:none; stroke:grey;"/>'
 	# texte du liseré
@@ -104,10 +104,10 @@ def calcule_svg1(texte):
 		svg += '<animate attributeName="y2" from="'+str(ord1)+'" to="'+str(Y2)+ '" begin="0s" dur="2s" />'
 		svg += '</line>'
 		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		svg += '<ellipse cx="'+str(X+33)+'" cy="'+str(Y2-17)+'" rx="'+str(len(a[3])*8)+'" ry="16" style="fill:white; stroke-width:1; stroke:grey"/>'
+		svg += '<ellipse cx="'+str(X+23)+'" cy="'+str(Y2-15)+'" rx="'+str(len(a[3])*8)+'" ry="14" style="fill:white; stroke-width:1; stroke:transparent"/>'
 		#svg += '<set attributeName="fill" to="white" begin="2" />'
 		#svg += '<set attributeName="stroke" to="grey" begin="2" /></ellipse>'
-		svg += '<text x="'+str(X+33) + '" y="' + str(Y2-17) + '" style="text-anchor:middle; fill:grey; dominant-baseline:middle">' + a[3]
+		svg += '<text x="'+str(X+23) + '" y="' + str(Y2-15) + '" style="text-anchor:middle; fill:grey; dominant-baseline:middle">' + a[3]
 		svg += '</text>'
 		#svg += '<set attributeName="fill" to="grey" begin="2" /></text>'
 
