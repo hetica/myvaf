@@ -46,7 +46,7 @@ header {
 	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
 	border: solid 1px green;
 	padding-top: 10px ;
-	padding-bottom: 20px ;
+	//padding-bottom: 20px ;
 	padding-left: 35px ;
 	margin-top: 15px ;
 	margin-bottom: 50px ;
@@ -65,6 +65,7 @@ header a {
 
 #doublehelix {
 	float: left ;
+	//margin-top: 10px;
 	padding-top: 1px;
 	padding-right: 50px;
 	height: 70px ;
@@ -99,12 +100,12 @@ nav
 
 nav ul { 
 	margin-bottom: 0; 
+	margin-right: 15px;
 }
 
 nav li
 {
 	display: inline-block;
-	margin-right: 15px;
 	margin-bottom: 9px;
 }
 

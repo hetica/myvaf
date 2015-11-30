@@ -12,6 +12,7 @@ import os, sys
 import cgi
 import cgitb; cgitb.enable() 								# Affiche les erreurs dans le browser
 import cairosvg												# pour générer un graphique au format png
+import common
 
 form = cgi.FieldStorage()
 
@@ -24,29 +25,6 @@ def file_check_ok(texte):
 	if texte == "":
 		return False
 	return True
-
-def parse_file(texte):
-	"""
-	découper le fichier en autant de lignes / champs
-	input : le fichier
-	output : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
-	"""
-	
-	texte = texte.split("\n")								# Sépare la chaine en liste de lignes
-
-	if "Gene" or "gene" in texte[0]:						# supprime la ligne d'entete si nécessaire
-		del texte[0]
-	for i,line in enumerate(texte):							# supprime les lignes non conformes
-		if not "\t" in line:
-			del texte[i]
-		try:
-			if line == '': del texte[i]
-		except:
-			pass
-	for i,line in enumerate(texte):							# sépare les lignes en champs 
-		texte[i] = line.split("\t")
-		
-	return texte
 
 def calcule_svg1(texte):
 	"""
@@ -126,16 +104,15 @@ def calcule_svg1(texte):
 		svg += '<animate attributeName="y2" from="'+str(ord1)+'" to="'+str(Y2)+ '" begin="0s" dur="2s" />'
 		svg += '</line>'
 		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		svg += '<ellipse cx="'+str(X+36)+'" cy="'+str(Y2-12)+'" rx="32" ry="17" style="fill:white; opacity:0.8; stroke-width:1; stroke:grey"/>'
+		svg += '<ellipse cx="'+str(X+33)+'" cy="'+str(Y2-17)+'" rx="'+str(len(a[3])*8)+'" ry="16" style="fill:white; stroke-width:1; stroke:grey"/>'
 		#svg += '<set attributeName="fill" to="white" begin="2" />'
 		#svg += '<set attributeName="stroke" to="grey" begin="2" /></ellipse>'
-		svg += '<text x="'+str(X+36) + '" y="' + str(Y2-6) + '" style="text-anchor:middle" fill="grey">' + a[3]
+		svg += '<text x="'+str(X+33) + '" y="' + str(Y2-17) + '" style="text-anchor:middle; fill:grey; dominant-baseline:middle">' + a[3]
 		svg += '</text>'
 		#svg += '<set attributeName="fill" to="grey" begin="2" /></text>'
 
-	svg += '</svg>'									# la fin du fichier SVG
 	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
-	
+	svg += '</svg>'									# la fin du fichier SVG
 	return svg										# il ne reste plus qu'à retourner le fichier
 
 def build_png_file(svg, png):
@@ -146,7 +123,6 @@ def build_png_file(svg, png):
 	#png = cairosvg.svg2png(bytestring = svg)
 	cairosvg.svg2png(bytestring=bytes(svg,'UTF-8'), write_to = png)
 	print("<p>debug</p>")
-	#print("<br/>", png)
 
 def upload_png(png):
 	"""
@@ -197,8 +173,22 @@ def affiche_env():
 print("""content-type: text/html\n
 <!--#include virtual="/head.html" -->
 <!--#include virtual="/header.html" -->
-<!--#include virtual="/form1.html" -->
 """)
+
+print("""
+<section>
+<article>
+<h1>MyVAF</h1>
+<p>
+	Affiche un graphique de la fréquence des allèles variants pour un échantilon.<br/>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample_myvaf.txt" download="sample.txt" id="upload_file" >sample.txt</a>
+</p>
+<br />
+""")
+
+common.formulaire("index.py")
+
+#formulaire()
 
 if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
@@ -209,10 +199,10 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	for i,a in enumerate(fichier):
 		if a == ".": ind = i
 	fichier = fichier[:ind]
-	# définie le nom et emplacement du graphique png
+	# définit le nom et emplacement du graphique png
 	png_path = "../graphics/" + fichier + ".png"
 	png_file = fichier + ".png"
-	# définie le nom et emplacement du graphique png
+	# définit le nom et emplacement du graphique png
 	svg_path = "../graphics/" + fichier + ".svg"
 	svg_file = fichier + ".svg"	
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
@@ -220,7 +210,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
 	texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
-		texte = parse_file(texte)				# on analyse on fichier
+		texte = common.parse_myvaf(texte)		# on analyse on fichier
 		svg = calcule_svg1(texte)				# on crée le fichier svg1
 		print(svg)								# AFFICHER LE SVG
 		#build_png_file(svg, png_path)			# créer un fichier PNG (pas au point)
@@ -232,5 +222,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
 	
 print("""
+</article>
+</section>
 <!--#include virtual="/footer.html" -->
 """)
