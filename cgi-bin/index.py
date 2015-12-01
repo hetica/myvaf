@@ -16,6 +16,19 @@ import common
 
 form = cgi.FieldStorage()
 
+def file_format(texte):										# mettre au format utf-8
+	#print(type(texte))
+	#cmd = '/bin/echo ' + texte.decode("utf-8") +' | /usr/bin/iconv -f ISO_8859-1 -t UTF-8'
+	#print(cmd)
+	#texte = texte.encode('utf-8')
+	#t = texte.decode("utf-8")
+	#t = texte.decode("ISO_8859-1")
+	t = texte.decode("utf-8")
+	#t = texte.decode('ISO-8859-1', 'ignore').encode('utf-8')
+	#with open('test.txt','w') as fic:
+	#	fic.write(t)
+	return t
+
 def file_check_ok(texte):
 	"""
 	Vérifier si la syntaxe du fichier est correcte
@@ -194,7 +207,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
 	fileitem = form['fichier_csv']
 
-	# définie le nom du fichier sans son extension	
+	# définit le nom du fichier sans son extension	
 	fichier = fileitem.filename
 	for i,a in enumerate(fichier):
 		if a == ".": ind = i
@@ -208,7 +221,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
 	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
-	texte = texte.decode("utf-8")				# passer le contenu au format texte utf-8 (il est au format bytes)
+	texte = file_format(texte)					# mettre le fichier au format utf-8
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
 		texte = common.parse_myvaf(texte)		# on analyse on fichier
 		svg = calcule_svg1(texte)				# on crée le fichier svg1

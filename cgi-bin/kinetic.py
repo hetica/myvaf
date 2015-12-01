@@ -57,6 +57,7 @@ def calcule_svg1(texte):
 	e_abc = l_abc / n_abc 	 								# espaces entre les abcisses des points
 	l_ord = hauteur - 150									# longueur de la barre utile des ordonnées
 	grad = l_ord / 10										# ecart entre graduation des ordonnées
+	ratio = l_ord / 100
 	
 	################# ICI ON DEFINIT LES POINTS DU SVG #####################
 	lis = [ str(x1+10), str(y1+10), str(x2-10), str(y2-10) ] 			# points extremes du liseré
@@ -67,7 +68,10 @@ def calcule_svg1(texte):
 	pos_abc = []														# liste des abcisses utilisées
 	x_text = []															# le texte des abcisses
 	col = 0																# numéro de colonne, la première colonne vaut 1
-	chemins = []
+	chemins = []														# définit la liste de tous les chemins
+	for i in range(n_chemins):											# définit chaque chemin
+		chemin = []
+		chemins.append(chemin)											# et l'ajoute dans la liste des chemins
 	for i,a in enumerate(texte):										# pour chaque ligne du texte
 		col +=1	
 		line = 0
@@ -81,13 +85,27 @@ def calcule_svg1(texte):
 					x_ech += e_abc										# on augmente la valeur de la position
 					pos_abc.append(x_ech)								# et on stocke la valeur dans pos_abc[]
 				x_text.append(b) 										# on stocke le contenu des en-tete dans x_text[]
-			else:
-				for k in range(1,n_chemins+1):
-					if col != 1:
-						print(a[k], "-")
-
-	print("<br/>col: ",col)
-	print("<br/>line: ",line)
+			else:														# pour les autres lignes
+				for k in range(1,n_chemins+1):							# pour les indices 1 à "chemin"
+					if col != 1 and line == k+1:						# on évite la première colonne et on limite au chemin en question
+						chemins[k-1].append(float(a[k]))						# on ajoute dans la ligne[indice k-1]
+						#chemin.append(a[k])								# 	
+				
+						
+	#print(chemins)
+	for i, chemin in enumerate(chemins):								# transformer les valeurs en positions d'ordonnées
+		for j,val in enumerate(chemin):
+			chemins[i][j] = str(y_abc - ratio * val)
+	#print("<br/>",chemins)
+	
+	'''
+	for i, chemin in enumerate(chemins):
+		for j,val in enumerate(chemin):
+			print("ord: ", val," - abc: ", pos_abc[j])
+		print("<br/>")
+	'''
+	#print(pos_abc)
+	
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
 	svg = '<?xml version="1.0" encoding="utf-8"?> '
@@ -120,7 +138,15 @@ def calcule_svg1(texte):
 		# Le texte des abscisses
 		y_text = str(y_abc + 16)		# position verticale du texte
 		svg += '<text x="'+str(a+4)+'" y="'+y_text+'"  style="text-anchor:end" letter-spacing="15px" transform="rotate(-45,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
-
+	# les positions des chemins
+	for i, chemin in enumerate(chemins):								# Pour chaque chemin
+		svg += '<path d="M '
+		for j,val in enumerate(chemin):									# pour chaque position
+			if j != 0:
+				svg += ' L '
+			svg += str(pos_abc[j])+','+val + ' '
+		svg += '" style="stroke:grey; fill:none" />'
+	
 	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
 	svg += '</svg>'									# la fin du fichier SVG
 	return svg										# il ne reste plus qu'à retourner le fichier
