@@ -16,17 +16,11 @@ import common
 
 form = cgi.FieldStorage()
 
-def file_format(texte):										# mettre au format utf-8
-	#print(type(texte))
-	#cmd = '/bin/echo ' + texte.decode("utf-8") +' | /usr/bin/iconv -f ISO_8859-1 -t UTF-8'
-	#print(cmd)
-	#texte = texte.encode('utf-8')
-	#t = texte.decode("utf-8")
-	#t = texte.decode("ISO_8859-1")
-	t = texte.decode("utf-8")
-	#t = texte.decode('ISO-8859-1', 'ignore').encode('utf-8')
-	#with open('test.txt','w') as fic:
-	#	fic.write(t)
+def file_format(texte):										# mettre en unicode
+	try:
+		t = texte.decode("utf-8")
+	except:
+		t = texte.decode("ISO-8859-1")
 	return t
 
 def file_check_ok(texte):
@@ -131,11 +125,9 @@ def calcule_svg1(texte):
 def build_png_file(svg, png):
 	"""
 	Crée un fichier png pour le téléchargement
-	"""
-	
+	"""	
 	#png = cairosvg.svg2png(bytestring = svg)
 	cairosvg.svg2png(bytestring=bytes(svg,'UTF-8'), write_to = png)
-	print("<p>debug</p>")
 
 def upload_png(png):
 	"""
@@ -194,7 +186,7 @@ print("""
 <h1>MyVAF</h1>
 <p>
 	Affiche un graphique de la fréquence des allèles variants pour un échantilon.<br/>
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample_myvaf.txt" download="sample_myvaf.txt" id="upload_file" >sample_myvaf.txt</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample-myvaf.txt" download="sample-myvaf.txt" id="upload_file" >sample_myvaf.txt</a>
 </p>
 <br />
 """)
@@ -221,15 +213,15 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
 	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
-	texte = file_format(texte)					# mettre le fichier au format utf-8
+	texte = file_format(texte)					# mettre le fichier en unicode
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
 		texte = common.parse_myvaf(texte)		# on analyse on fichier
 		svg = calcule_svg1(texte)				# on crée le fichier svg1
 		print(svg)								# AFFICHER LE SVG
-		#build_png_file(svg, png_path)			# créer un fichier PNG (pas au point)
-		#upload_png(png_path)					# créer le lien de téléchargement de ce PNG
-		build_svg_file(svg, svg_path)			# créer un fichier SVG
-		upload_svg(svg_path)					# créer le lien de téléchargement de ce SVG
+		build_png_file(svg, png_path)			# créer un fichier PNG (pas au point)
+		upload_png(png_path)					# créer le lien de téléchargement de ce PNG
+		#build_svg_file(svg, svg_path)			# créer un fichier SVG
+		#upload_svg(svg_path)					# créer le lien de téléchargement de ce SVG
 		#debug(texte)							# pour debugguer
 		#affiche_env()							# affiche les variables d'environnement renvoyées par Apache
 		

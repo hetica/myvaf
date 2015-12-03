@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 #! -*- coding:utf-8 -*-
 
-
 def formulaire(cgi_fic):
-	print('<form id="upload_form" enctype="multipart/form-data" method="post" action="/cgi-bin/' + cgi_fic + '">')
+	print('<form enctype="multipart/form-data" method="post" action="/cgi-bin/' + cgi_fic + '">')
 	print("""
-		<label for="image_file">Sélectionner un fichier</label><br />
-		<input type="file" name="fichier_csv" id="fichier_csv" onchange="fileSelected();"/>
-		<p>
-			<input type="submit" name="Submit" value="Télécharger" />
-		</p>
-	</form>
+		<label for="image_file">Sélectionner un fichier :</label><br />
+		<input type="file" onChange="this.form.submit()" name="fichier_csv"> 
+	</form><br/>
 	""")
 
 def parse_myvaf(texte):

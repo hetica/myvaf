@@ -34,5 +34,6 @@ En supléments aux fichier du site, il y a le répertoire **other** :
 * python3 avec les modules : 
 	* cgi
 	* cgitb
-	* cairosvg
+	* python3-markdown
+	* python3-cairosvg
 

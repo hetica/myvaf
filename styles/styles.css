@@ -16,8 +16,8 @@
 
 html {
     font-family: sans-serif;
-    //font-family: Courier,monospace ;
-    //font-weight: bold ;	
+    /*font-family: Courier,monospace ;*/
+    /*font-weight: bold ;*/	
 }
 
 
@@ -46,11 +46,11 @@ header {
 	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
 	border: solid 1px green;
 	padding-top: 10px ;
-	//padding-bottom: 20px ;
+	/*padding-bottom: 20px ;*/
 	padding-left: 35px ;
 	margin-top: 15px ;
 	margin-bottom: 50px ;
-	//text-align: center ;
+	/*text-align: center ;*/
 	border-radius: 0 0 0 50px ;
 	box-shadow: 0 0 8px rgba(75, 160, 85, 0.7) ;
 }
@@ -65,7 +65,7 @@ header a {
 
 #doublehelix {
 	float: left ;
-	//margin-top: 10px;
+	/*margin-top: 10px;*/
 	padding-top: 1px;
 	padding-right: 50px;
 	height: 70px ;
@@ -76,7 +76,7 @@ header a {
 	display: inline-block ;
 	width: 30% ;
 	vertical-align: top ;
-	//padding-left: 3%;
+	/*padding-left: 3%;*/
 	text-align: center ;
 	color: #191685 ;
 }
@@ -113,8 +113,8 @@ nav a
 {
 	text-decoration: none;
 	font-size: large;
-	//font-weight: bold ;	
-	//color: #FFFFFF;
+	/*font-weight: bold ;*/	
+	/*color: #FFFFFF;*/
 	padding: 10px;
 	color: #1E7A16;
 	border-radius: 10px 10px 0 0 ;
@@ -132,7 +132,7 @@ section {
 	display: inline-block ;
 	vertical-align: top ;
 	width: 60% ;
-	// border-right: 1px groove; 
+	/* border-right: 1px groove; */
 }
 
 
@@ -184,7 +184,7 @@ aside {
 }
 
 aside .infos {
-	//display: inline-block;
+	/*display: inline-block;*/
 	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
 	border: 1px groove green ;
 	border-radius: 10px ;
@@ -217,9 +217,9 @@ aside .infos a[href] {
 aside .infos a[href]:hover {
 	border-bottom: solid 1px ;
 	font-style: italic ;
-	//color: #CB0000 ;
-	//color: #FFF ;
-	//background: #7D7D7D ;
+	/*color: #CB0000 ;*/
+	/*color: #FFF ;*/
+	/*background: #7D7D7D ;*/
 }
 
 aside .image {
@@ -263,7 +263,7 @@ input[type=submit], #upload_file {
 	}
 
 input[type=submit] {
-	//display: none ;
+	/*display: none ;*/
 }
 
 input[type="file"] {

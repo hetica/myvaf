@@ -6,7 +6,16 @@ import cgi
 import cgitb; cgitb.enable() 								# Affiche les erreurs dans le browser
 import common
 
+
+
 form = cgi.FieldStorage()
+
+def file_format(texte):										# mettre en unicode
+	try:
+		t = texte.decode("utf-8")
+	except:
+		t = texte.decode("ISO-8859-1")
+	return t
 
 def file_check_ok(texte):
 	"""
@@ -178,7 +187,7 @@ print("""
 <p>
 	Représente des fréquences alléliques variantes détectées  par patient, dans plusieurs échantillons séquentiels,
 	sous forme de graphique d'évolution clonale.<br/> 
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample_kinetic.csv" download="sample_kinetic.csv" id="upload_file" >sample_kinetic.csv</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample-kinetic.csv" download="sample-kinetic.csv" id="upload_file" >sample_kinetic.csv</a>
 </p>
 <br />
 """)
@@ -201,7 +210,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 
 	texte = fileitem.file.read()					# on passe dans la variable texte la partie texte
-	texte = texte.decode("utf-8")					# passer le contenu au format texte utf-8 (il est au format bytes)
+	texte = file_format(texte)						# mettre le fichier en unicode(il est au format byte)
 	if file_check_ok(texte):						# Si le controle du format de fichier est OK
 		texte = common.parse_kinetic(texte)			# on analyse le fichier
 		svg = calcule_svg1(texte)					# on crée le fichier svg1
