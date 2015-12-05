@@ -26,7 +26,7 @@ h2 { color: #CB0000 ; font-family: caviardreams; }
 h3 { color: #CB0000 ; font-family: caviardreams ; }
 h4 { color: #CB0000 ; font-family: caviardreams ; }
 h5 { color: #CB0000 ; font-family: caviardreams ; }
-p  { color: #3D3D3D	; }
+p  { color: #3D3D3D	; text-align: justify ; }
 pre {color: #3D3D3D; font-size: 1.1em ; } 
 
 body {
@@ -227,13 +227,6 @@ aside .image {
 	padding-left: 7px;
 }
 
-footer {
-	margin-top: 50px ;
-	text-align: center ;
-	font-style: italic;
-	color: #575856;
-	font-size: 0.8em ;
-}
 
 input[type=button] {
     background: -moz-linear-gradient(#ffffff, #dfdfdf);
@@ -292,4 +285,12 @@ input[type=submit] {
     cursor: pointer;
 }
 
+footer {
+	margin-top: 50px ;
+	margin-bottom: 8px ;
+	text-align: center ;
+	font-style: italic;
+	color: #575856;
+	font-size: 0.8em ;
+}
 

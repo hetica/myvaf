@@ -16,7 +16,15 @@ def formulaire(cgi_fic):
 	""")
 
 
-
+def file_format(texte):
+	# MET EN UNICODE
+	try:
+		t = texte.decode("utf-8")
+	except:
+		t = texte.decode("ISO-8859-1")
+	# REMPLACE LES VIRGULES PAR DES POINTS
+	t = t.replace(",", ".")
+	return t
 
 def parse_myvaf(texte):
 	"""
@@ -71,7 +79,7 @@ def parse_kinetic(texte):
 			 if j in items:
 				 l.append(champs)
 		tab_text.append(l)
-
+		
 	return tab_text
 
 
@@ -86,5 +94,9 @@ def upload_png(png_path, png_file):
 	"""
 	Affiche le lien de téléchargement du fichier png
 	"""
-	# print("<p>"+png_file+"</p>")
-	print('<br /><a href="' + png_path + '" download="' + png_file + '" id="upload_file" >Télécharger le graphique<a>' )
+	if png_file == "cartouche.png":
+		name = "cartouche"
+	else:
+		name = "graphique"
+		
+	print('<p><a href="' + png_path + '" download="' + png_file + '" id="upload_file" >Télécharger le '+name+'</a></p>' )

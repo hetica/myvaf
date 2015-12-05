@@ -16,13 +16,6 @@ import common
 
 form = cgi.FieldStorage()
 
-def file_format(texte):										# mettre en unicode
-	try:
-		t = texte.decode("utf-8")
-	except:
-		t = texte.decode("ISO-8859-1")
-	return t
-
 def file_check_ok(texte):
 	"""
 	Vérifier si la syntaxe du fichier est correcte
@@ -40,10 +33,15 @@ def calcule_svg1(texte):
 	output : String représentant le fichier SVG
 	"""
 	################# ICI DEFINIT LES POINTS DU SVG #####################
+	largeur = 620											# largeur du graphique
+	hauteur = 420											# hauteur du graphique
 	# les abcisses
 	abc1 = 100 ; abc2 = 560									# longueur utile de la barre des abcisses
 	abc_t = abc2 - abc1										# longueur utile pour les abcisses
 	eb = (abc2-abc1) / len(texte) 							# espace entre chaque barre (1/2 espace au début et à la fin)
+	x_mid = largeur / 2										# axe vertical median
+	lis_start = x_mid - len(fichier) * 6					# point d'abscisse de départ du liseré
+	lis_stop = x_mid + len(fichier) * 6						# point d'abscisse d'arrivée du liseré
 	# les ordonnées
 	ord1 = 330 ; ord2 = 60									# ord1 : base ; ord2 : hauteur max
 	ord_t = ord1 - ord2										# longueur utile pour les ordonnées
@@ -73,10 +71,7 @@ def calcule_svg1(texte):
 	ea = (ord1 - ord2) / len(val_ord)	
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
-	svg = '<?xml version="1.0" encoding="utf-8"?> '
-	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" '
-	svg += '"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> '
-	svg += '<svg width="620px" height="420px" xml:lang="fr" '
+	svg = '<svg width="'+str(largeur)+'px" height="'+str(hauteur)+'px" xml:lang="fr" '
 	svg += 'xmlns="http://www.w3.org/2000/svg" '
 	svg += 'xmlns:xlink="http://www.w3.org/1999/xlink">'
 	svg += '<title>My VAF</title>'
@@ -85,9 +80,9 @@ def calcule_svg1(texte):
 	# Cadre exterieur (en fonction de la définition de l'écran, avec un max et min)
 	svg += '<rect x="0" y="0" width="620" height="420" fill="white"/>'
 	# Position du liseré exterieur 
-	svg += '<path d="M 150,10 L 10,10 L 10,410 L 610,410 L 610,10 L 250,10" style="fill:none; stroke:grey;"/>'
+	svg += '<path d="M '+str(lis_start)+',10 L 10,10 L 10,410 L 610,410 L 610,10 L '+str(lis_stop)+',10" style="fill:none; stroke:grey;"/>'
 	# texte du liseré
-	svg += '<text id="lisere1" x="160" y="15">' + fichier + '</text>'
+	svg += '<text id="lisere1" x="'+str(x_mid)+'" y="15" text-anchor="middle">' + fichier + '</text>'
 	# ligne des abcisses
 	svg += '<line x1="' + str(abc1-5) +'" y1="330" x2="' + str(abc2+5) + '" y2="330" stroke="grey"/>'
 	# ligne de base des ordonnées
@@ -122,36 +117,6 @@ def calcule_svg1(texte):
 	svg += '</svg>'									# la fin du fichier SVG
 	return svg										# il ne reste plus qu'à retourner le fichier
 
-def build_png_file(svg, png):
-	"""
-	Crée un fichier png pour le téléchargement
-	"""	
-	#png = cairosvg.svg2png(bytestring = svg)
-	cairosvg.svg2png(bytestring=bytes(svg,'UTF-8'), write_to = png)
-
-def upload_png(png):
-	"""
-	Affiche le lien de téléchargement du fichier png
-	"""
-	# print("<p>"+png_file+"</p>")
-	print('<br /><a href="' + png + '" download="' + png_file + '" id="upload_file" >Télécharger le graphique<a>' )
-
-
-def build_svg_file(svgContent, svgFile):
-	"""
-	Crée un fichier svg pour le téléchargement
-	"""
-	with open(svgFile, 'w') as f:
-		f.write(svg)
-
-def upload_svg(svg):
-	"""
-	Affiche le lien de téléchargement du fichier svg
-	"""
-	# print("<p>"+png_file+"</p>")
-	print('<br /><a href="' + svg + '" download="' + svg_file + '" id="upload_file" >Télécharger le graphique<a>' )
-
-
 def debug(texte):
 	"""
 	Pour le debug
@@ -185,13 +150,15 @@ print("""
 <article>
 <h1>MyVAF</h1>
 <p>
-	Affiche un graphique de la fréquence des allèles variants pour un échantilon.<br/>
+	Affiche un graphique de la fréquence des allèles variants pour un échantillon.
+</p>
+<p>
 	Un fichier d'exemple est téléchargeable : <a href="/static/sample-myvaf.txt" download="sample-myvaf.txt" id="upload_file" >sample-myvaf.txt</a>
 </p>
 <br />
 """)
 
-common.formulaire("index.py")
+common.formulaire("myvaf.py")
 
 #formulaire()
 
@@ -213,15 +180,13 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
 	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
-	texte = file_format(texte)					# mettre le fichier en unicode
+	texte = common.file_format(texte)			# mettre le fichier en unicode
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
 		texte = common.parse_myvaf(texte)		# on analyse on fichier
 		svg = calcule_svg1(texte)				# on crée le fichier svg1
 		print(svg)								# AFFICHER LE SVG
-		common.build_png_file(svg, png_path)	# créer un fichier PNG (pas au point)
+		common.build_png_file(svg, png_path)	# créer un fichier PNG
 		common.upload_png(png_path, png_file)	# créer le lien de téléchargement de ce PNG
-		#build_svg_file(svg, svg_path)			# créer un fichier SVG
-		#upload_svg(svg_path)					# créer le lien de téléchargement de ce SVG
 		#debug(texte)							# pour debugguer
 		#affiche_env()							# affiche les variables d'environnement renvoyées par Apache
 		

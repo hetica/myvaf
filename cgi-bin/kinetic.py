@@ -6,21 +6,12 @@ import cgi
 import cgitb; cgitb.enable() 								# Affiche les erreurs dans le browser
 import common
 
-
-
 form = cgi.FieldStorage()
 
-def file_format(texte):
-	# MET EN UNICODE
-	try:
-		t = texte.decode("utf-8")
-	except:
-		t = texte.decode("ISO-8859-1")
-	# REMPLACE LES VIRGULES PAR DES POINTS
-	t = t.replace(",", ".")
-	return t
-
-
+# variables globales
+dash = [ "0", "22,2", "20,2,4,2,4,2,4,2", "4,2", "20,2,4,2"]		# définition des tirets des chemins
+color = [ "#D9D9D9", "#8F8F8F", "#808080", "#707070", "#979797" ]	# définition des couleurs des chemins
+	
 def file_check_ok(texte):
 	"""
 	Vérifier si la syntaxe du fichier est correcte
@@ -30,7 +21,6 @@ def file_check_ok(texte):
 	if texte == "":
 		return False
 	return True
-
 
 def calcule_svg1(texte):
 	"""
@@ -99,29 +89,23 @@ def calcule_svg1(texte):
 					if col != 1 and line == k+1:						# on évite la première colonne et on limite au chemin en question
 						chemins[k-1].append(float(a[k]))				# on ajoute dans la ligne[indice k-1]
 				
-	#print(nom_path)					
-	#print(chemins)
 	for i, chemin in enumerate(chemins):								# transformer les valeurs en positions d'ordonnées
 		for j,val in enumerate(chemin):
 			chemins[i][j] = str(y_abc - ratio * val)
 
-	dash = [ "0", "22,2", "20,2,4,2,4,2,4,2", "4,2", "20,2,4,2"]		# définition des tirets des chemins
-	color = [ "#D9D9D9", "#8F8F8F", "#808080", "#707070", "#979797" ]	# définition des couleurs des chemins
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
-	svg = '<?xml version="1.0" encoding="utf-8"?> '
-	svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" '
-	svg += '"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> '
-	svg += '<svg width="'+str(x2)+'px" height="'+str(y2)+'px" xml:lang="fr" '
+	svg = '<svg width="'+str(x2)+'px" height="'+str(y2)+'px" xml:lang="fr" '
 	svg += 'xmlns="http://www.w3.org/2000/svg" '
 	svg += 'xmlns:xlink="http://www.w3.org/1999/xlink">'
 	svg += '<title>Kinetic</title>'
 
 	# Cadre exterieur (en fonction de la définition de l'écran, avec un max et min)
-	svg += '<rect x="'+str(x1)+'" y="'+str(y1)+'" width="'+str(x2)+'" height="'+str(y2)+'" fill="white" opacity="0.7"/>'
+	svg += '<rect x="'+str(x1)+'" y="'+str(y1)+'" width="'+str(x2)+'" height="'+str(y2)+'" fill="white" />'
 	# liseré et son texte
 	svg += '<path d="M '+str(x_mid-len(texte[0][0])*6)+','+lis[1]+' L '+lis[0]+','+lis[1]+' L '+lis[0]+','+lis[3]+' L '+lis[2]+','+lis[3]+' L '+lis[2]+','+lis[1]+' L '+str(x_mid+len(texte[0][0])*6)+','+lis[1]+'" style="fill:none; stroke:grey;"/>'
-	svg += '<text id="lisere" x="'+str(x_mid)+'" y="'+lis[1]+'" dominant-baseline="middle" text-anchor="middle">' + texte[0][0] + '</text>'
+	#svg += '<text id="lisere" x="'+str(x_mid)+'" y="'+lis[1]+'" dominant-baseline="middle" text-anchor="middle">' + texte[0][0] + '</text>'
+	svg += '<text id="lisere" x="'+str(x_mid)+'" y="'+str(y1+15)+'" text-anchor="middle">' + texte[0][0] + '</text>'
 	# ligne des abcisses
 	svg += '<line x1="'+abc[0]+'" y1="'+abc[1]+'" x2="'+abc[2]+'" y2="'+abc[3]+'" stroke="grey"/>'
 	# ligne de base des ordonnées
@@ -131,7 +115,7 @@ def calcule_svg1(texte):
 	y_ech = y_abc
 	for a in range(10,101,10):
 		y_ech -= grad 
-		svg += '<line x1="'+abc[0]+ '" y1="'+str(y_ech) + '" x2="' +abc[2]+ '" y2="'+str(y_ech) + '" stroke="#D9D9D9"/>'
+		svg += '<line x1="'+abc[0]+ '" y1="'+str(y_ech) + '" x2="' +abc[2]+ '" y2="'+str(y_ech) + '" stroke="#E8E8E8"/>'
 		svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_ech) + '" style="text-anchor:end; dominant-baseline:middle;">'+ str(a) +' %</text>'
 	# Position des abcisses
 	for i, a in enumerate(pos_abc):
@@ -153,6 +137,65 @@ def calcule_svg1(texte):
 	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
 	svg += '</svg>'									# la fin du fichier SVG
 	return svg										# il ne reste plus qu'à retourner le fichier
+
+def cartouche(texte):
+	"""
+	Le cartouche pour les graphiques
+	Il est séparé, car un seul cartouche pour plusieurs graphique
+	"""
+	#print(texte)
+	nb_chemins = 0										# nombre de chemins
+	mark = ""											# le marqueur (chemin 1, grisé pâle)
+	hrm = ""											# High Risk Mutation (les autres chemins, ex : TP53-CCF)
+	xy = (0,0,300,160)									# rectangle exterieur
+	lis = (xy[0]+10, xy[1]+10, xy[2]-20, xy[3]-20)	 	# points du liseré
+	width = xy[2] - xy[0]								# largeur du graphique
+	height = xy[3] - xy[1]								# hauteur du graphique
+	texte = texte.split("\n")							# découper le texte en lignes
+	for i,line in enumerate(texte):
+		# Analyser la première ligne uniquement
+		if i == 0:
+			line = line.split(";")
+			mark = line[1].split(")")[0]+")"			# marqueur (chemin 1, grisé pâle) (ex: del(5q))
+			hrm = line[2].split(" ")[0]+"-CCF"			# high risk (les autres chemins) (ex: TP53-CCF)
+			for field in line:							# nombre de chemins
+				if "-CCF" in field:
+					nb_chemins += 1				
+	#print(nb_chemins, " - " , mark, " - ", hrm) 
+	x_texte = xy[0] + 20								# début du texte
+	x_dash = max(len(mark), len(hrm)) * 15 				# début des tirets
+	xe_dash = xy[2]-50									# fin des tirets
+	y_mark = xy[3] - ( 2 * height / 3 ) - 5				# ordonnée pour le marqueur mark
+	y_hrm = xy[3] - ( height / 3 )	- 20				# ordonnée pour le texte du hrm
+	ec_hrm = ( xy[3] - y_hrm ) / 3						# écart entre les traits d'hrm
+	
+	
+	################# ICI ON COMMENCE LA DEFINITION DU CARTOUCHE #####################
+	svg = '<svg width="'+str(width)+'px" height="'+str(height)+'px" xml:lang="fr" '
+	svg += 'xmlns="http://www.w3.org/2000/svg" '
+	svg += 'xmlns:xlink="http://www.w3.org/1999/xlink">'
+	svg += '<title>Kinetic</title>'
+	# Cadre exterieur (en fonction de la définition de l'écran, avec un max et min)
+	svg += '<rect x="'+str(xy[0])+'" y="'+str(xy[1])+'" width="'+str(xy[2])+'" height="'+str(xy[3])+'" fill="white" />'
+	# Liseré
+	svg += '<rect x="'+str(lis[0])+'" y="'+str(lis[1])+'" width="'+str(lis[2])+'" height="'+str(lis[3])+'" fill="transparent" stroke="grey" />'
+	# texte du marqueur	mark
+	svg += '<text x="'+str(x_texte) + '" y="'+str(y_mark) + '" >'+ mark +'</text>'
+	# texte du hrm (High Risk Mutation)
+	svg += '<text x="'+str(x_texte) + '" y="'+str(y_hrm) + '" >'+ hrm +'</text>'
+	# trait du marqueur mark
+	svg += '<line x1="'+str(x_dash)+'" y1="'+str(y_mark-4)+'" x2="'+str(xe_dash)+'" y2="'+str(y_mark-4)+'"'
+	svg += ' stroke="'+color[0]+'" stroke-width="3" stroke-dasharray="'+dash[0]+'" />'
+	# traits des hrm
+	y = y_hrm -5
+	for a in range(1, nb_chemins+1):
+		svg += '<line x1="'+str(x_dash)+'" y1="'+str(y)+'" x2="'+str(xe_dash)+'" y2="'+str(y)+'"'
+		svg += ' stroke="'+color[a]+'" stroke-width="3" stroke-dasharray="'+dash[a]+'" />'
+		y += ec_hrm
+
+	################# ICI ON TERMINE LA DEFINITION DU CARTOUCHE #####################
+	svg += '</svg>'									# la fin du fichier SVG
+	return svg
 
 def debug(texte):
 	"""
@@ -181,7 +224,9 @@ print("""
 	
 <p>
 	Représente des fréquences alléliques variantes détectées  par patient, dans plusieurs échantillons séquentiels,
-	sous forme de graphique d'évolution clonale.<br/> 
+	sous forme de graphique d'évolution clonale.
+</p>
+<p>
 	Un fichier d'exemple est téléchargeable : <a href="/static/sample-kinetic.csv" download="sample-kinetic.csv" id="upload_file" >sample-kinetic.csv</a>
 </p>
 <br />
@@ -191,7 +236,7 @@ common.formulaire("kinetic.py")
 
 if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 	fileitem = form['fichier_csv']
-	# définie le nom du fichier sans son extension	
+	# définit le nom du fichier sans son extension	
 	fichier = fileitem.filename
 	for i,a in enumerate(fichier):
 		if a == ".": ind = i
@@ -199,19 +244,27 @@ if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 	# définit le nom et emplacement du graphique png
 	png_path = "../graphics/" + fichier + ".png"
 	png_file = fichier + ".png"
+	# définit le nom et emplacement du cartouche
+	cart_path = "../graphics/cartouche.png"
+	cart_file = "cartouche.png"
+	
 	# définit le nom et emplacement du graphique svg
-	svg_path = "../graphics/" + fichier + ".svg"
-	svg_file = fichier + ".svg"	
+	#svg_path = "../graphics/" + fichier + ".svg"
+	#svg_file = fichier + ".svg"	
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 
-	texte = fileitem.file.read()					# on passe dans la variable texte la partie texte
-	texte = file_format(texte)						# mettre le fichier en unicode(il est au format byte)
+	btexte = fileitem.file.read()					# on passe dans la variable texte la partie texte
+	texte = common.file_format(btexte)				# mettre le fichier en unicode(il est au format byte)
 	if file_check_ok(texte):						# Si le controle du format de fichier est OK
+		cart_svg = cartouche(texte)					# crée le  cartouche
 		texte = common.parse_kinetic(texte)			# on analyse le fichier
 		svg = calcule_svg1(texte)					# on crée le fichier svg1
 		print(svg)									# AFFICHER LE SVG
 		common.build_png_file(svg, png_path)		# créer un fichier PNG
 		common.upload_png(png_path, png_file)		# créer le lien de téléchargement de ce PNG
+		print(cart_svg)								# on affiche le cartouche
+		common.build_png_file(cart_svg, cart_path)	# créer un fichier PNG
+		common.upload_png(cart_path, cart_file)		# créer le lien de téléchargement de ce PNG
 		#debug(texte)								# pour debugguer
 
 		

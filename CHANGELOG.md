@@ -1,9 +1,10 @@
 ### Version 0.4
 Le 05/12/2015
 
-- kinetik : différencie les chemins
+- kinetik : différencie les chemins (pointillés)
 - remplace les virgules par des points (erreur float)
-- integre la première colonne (del5q)
+- intègre la première colonne (del5q)
+- ajoute un cartouche comme deuxième image
 
 ### Version 0.3
 Le 03/12/2015

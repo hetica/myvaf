@@ -3,7 +3,7 @@ Bref, tout un tas de trucs qui ne seront peut être jamais fait
 
 ###			- EN COURS -
 
-- Réfléchir à la façon de mettre en relief les valeurs (couleurs, epaisseurs, tirets)
+- En pause . . . 
 
 ###			- AMELIORATIONS A APPORTER -
 
@@ -15,8 +15,6 @@ Bref, tout un tas de trucs qui ne seront peut être jamais fait
 	
 - Afficher un message lorsque le fichier n'est pas correctement formaté
 
-- MyVAF : supporter les fichiers avec le point-virgule en délimiteur
-
 - Modifier la conf d'apache pour ne plus voir le chemin /cgi-bin
 	--> redirect / /cgi-bin/ ???
 	
@@ -25,8 +23,6 @@ Bref, tout un tas de trucs qui ne seront peut être jamais fait
 - faire une page : (version, contributeurs, licence)
 
 ### - BUGS -
-
-- Le nom du grahique sort de l'image téléchargée (en PNG)
 
 - affichage de debug lorsque le fichier n'est pas correct
 
