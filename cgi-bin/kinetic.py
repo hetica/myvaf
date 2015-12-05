@@ -10,12 +10,16 @@ import common
 
 form = cgi.FieldStorage()
 
-def file_format(texte):										# mettre en unicode
+def file_format(texte):
+	# MET EN UNICODE
 	try:
 		t = texte.decode("utf-8")
 	except:
 		t = texte.decode("ISO-8859-1")
+	# REMPLACE LES VIRGULES PAR DES POINTS
+	t = t.replace(",", ".")
 	return t
+
 
 def file_check_ok(texte):
 	"""
@@ -77,8 +81,10 @@ def calcule_svg1(texte):
 		line = 0
 		for j,b in enumerate(a):										# pour chaque champs de la ligne
 			line +=1
+			### PREMIERE LIGNE MOINS LA PREMIÈRE COLONNE
 			if i == 0 and j != 0:										# pour les champs de la ligne d'entête - 1ere colonne
 				nom_path.append(b)										# on récupère le nom du champs (nom du patient)
+			### DEUXIÈME LIGNE MOINS LE PREMIER CHAMPS
 			if line == 1 and col != 1:									# Sur la première ligne moins le premier champs
 				if col == 2:											# si on est sur le deuxième champs
 					x_ech += e_abc / 2									# la première abcisse est situé à un demi écart type
@@ -87,8 +93,9 @@ def calcule_svg1(texte):
 					x_ech += e_abc										# on augmente la valeur de la position
 					pos_abc.append(x_ech)								# et on stocke la valeur dans pos_abc[]
 				x_text.append(b) 										# on stocke le contenu des en-tete dans x_text[]
+			### TOUTES LES AUTRES LIGNES
 			else:														# pour les autres lignes
-				for k in range(1,n_chemins+1):							# pour les indices 1 à "chemin"
+				for k in range(1,n_chemins+1):							# pour les indices 1 à "chemin" 
 					if col != 1 and line == k+1:						# on évite la première colonne et on limite au chemin en question
 						chemins[k-1].append(float(a[k]))				# on ajoute dans la ligne[indice k-1]
 				
@@ -97,16 +104,9 @@ def calcule_svg1(texte):
 	for i, chemin in enumerate(chemins):								# transformer les valeurs en positions d'ordonnées
 		for j,val in enumerate(chemin):
 			chemins[i][j] = str(y_abc - ratio * val)
-	#print("<br/>",chemins)
-	
-	'''
-	for i, chemin in enumerate(chemins):
-		for j,val in enumerate(chemin):
-			print("ord: ", val," - abc: ", pos_abc[j])
-		print("<br/>")
-	'''
-	#print(pos_abc)
-	
+
+	dash = [ "0", "22,2", "20,2,4,2,4,2,4,2", "4,2", "20,2,4,2"]		# définition des tirets des chemins
+	color = [ "#D9D9D9", "#8F8F8F", "#808080", "#707070", "#979797" ]	# définition des couleurs des chemins
 	
 	################# ICI ON COMMENCE LA DEFINITION DU SVG #####################
 	svg = '<?xml version="1.0" encoding="utf-8"?> '
@@ -126,13 +126,13 @@ def calcule_svg1(texte):
 	svg += '<line x1="'+abc[0]+'" y1="'+abc[1]+'" x2="'+abc[2]+'" y2="'+abc[3]+'" stroke="grey"/>'
 	# ligne de base des ordonnées
 	svg += '<line x1="'+ords[0]+'" y1="'+ords[1]+'" x2="'+ords[2]+'" y2="'+ords[3]+'" stroke="grey"/>'
-	svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_abc) + '" style="text-anchor:end;dominant-baseline:middle">0</text>'
+	svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_abc) + '" style="text-anchor:end;dominant-baseline:middle">0 %</text>'
 	# lignes intermédiaires des ordonnées
 	y_ech = y_abc
 	for a in range(10,101,10):
 		y_ech -= grad 
 		svg += '<line x1="'+abc[0]+ '" y1="'+str(y_ech) + '" x2="' +abc[2]+ '" y2="'+str(y_ech) + '" stroke="#D9D9D9"/>'
-		svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_ech) + '" style="text-anchor:end; dominant-baseline:middle;">'+ str(a) +'</text>'
+		svg += '<text x="'+str(x_ord-10) + '" y="'+str(y_ech) + '" style="text-anchor:end; dominant-baseline:middle;">'+ str(a) +' %</text>'
 	# Position des abcisses
 	for i, a in enumerate(pos_abc):
 		svg += '<line x1="'+str(a) + '" y1="'+ords[1]+'" x2="'+str(a) + '" y2="'+ ords[3] + '" style=" stroke:#D9D9D9"/>'
@@ -146,7 +146,7 @@ def calcule_svg1(texte):
 			if j != 0:
 				svg += ' L '
 			svg += str(pos_abc[j])+','+val + ' '
-		svg += '" style="stroke:grey; fill:none" stroke-width="4" >'
+		svg += '" stroke="'+color[i]+'" fill="none" stroke-width="4" stroke-dasharray="'+dash[i]+'" cursor="pointer" >'
 		#svg += '<set attributeName="stroke-width" to="4" />'
 		svg += '</path>'
 	

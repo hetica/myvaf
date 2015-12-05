@@ -59,6 +59,8 @@ def parse_kinetic(texte):
 	
 	items = []
 	for i,champs in enumerate(texte[0]):					# détermine les champs utiles
+		if i == 1:
+			items.append(i)
 		if "-CCF" in champs or i == 0:						# Les champs utiles doivent contenir "-CCF"
 			items.append(i)
 	
