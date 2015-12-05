@@ -48,7 +48,12 @@
   background-color: #ff4136; }
 
 .bg-red-ben {
+  transition: background 0.7s ;
   background-color: #CA4E49; }
+
+.bg-red-ben:hover {
+  background: #A62E29 ;
+}
 
 .bg-fuchsia {
   background-color: #f012be; }

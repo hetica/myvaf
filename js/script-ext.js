@@ -1,5 +1,4 @@
 
-
 function showButton(target) {
 	document.getElementById(target).style.display = 'block';
 };

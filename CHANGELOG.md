@@ -1,6 +1,8 @@
 ### Version 0.3
 Le 03/12/2015
 
+- le design des liens est revu
+- Le design du formulaire de téléchargement est revu
 - Ajoute la page Kinetic
 - Règle le problème de l'encodage (non testé) 
 - Ajoute une page "A faire"

@@ -27,16 +27,6 @@ def file_check_ok(texte):
 		return False
 	return True
 
-def formulaire():
-	print("""
-	<form id="upload_form" enctype="multipart/form-data" method="post" action="/cgi-bin/index.py">
-		<label for="image_file">Sélectionner un fichier</label><br />
-		<input type="file" name="fichier_csv" id="fichier_csv" onchange="fileSelected();"/>
-		<p>
-			<input type="submit" name="Submit" value="Télécharger" />
-		</p>
-	</form>
-	""")
 
 def calcule_svg1(texte):
 	"""
@@ -76,6 +66,7 @@ def calcule_svg1(texte):
 	x_ech = x_ord														# abcisse a un instant T
 	pos_abc = []														# liste des abcisses utilisées
 	x_text = []															# le texte des abcisses
+	nom_path = []														# le nom de chaque path, ou patient
 	col = 0																# numéro de colonne, la première colonne vaut 1
 	chemins = []														# définit la liste de tous les chemins
 	for i in range(n_chemins):											# définit chaque chemin
@@ -86,6 +77,8 @@ def calcule_svg1(texte):
 		line = 0
 		for j,b in enumerate(a):										# pour chaque champs de la ligne
 			line +=1
+			if i == 0 and j != 0:										# pour les champs de la ligne d'entête - 1ere colonne
+				nom_path.append(b)										# on récupère le nom du champs (nom du patient)
 			if line == 1 and col != 1:									# Sur la première ligne moins le premier champs
 				if col == 2:											# si on est sur le deuxième champs
 					x_ech += e_abc / 2									# la première abcisse est situé à un demi écart type
@@ -97,10 +90,9 @@ def calcule_svg1(texte):
 			else:														# pour les autres lignes
 				for k in range(1,n_chemins+1):							# pour les indices 1 à "chemin"
 					if col != 1 and line == k+1:						# on évite la première colonne et on limite au chemin en question
-						chemins[k-1].append(float(a[k]))						# on ajoute dans la ligne[indice k-1]
-						#chemin.append(a[k])								# 	
+						chemins[k-1].append(float(a[k]))				# on ajoute dans la ligne[indice k-1]
 				
-						
+	#print(nom_path)					
 	#print(chemins)
 	for i, chemin in enumerate(chemins):								# transformer les valeurs en positions d'ordonnées
 		for j,val in enumerate(chemin):
@@ -146,15 +138,17 @@ def calcule_svg1(texte):
 		svg += '<line x1="'+str(a) + '" y1="'+ords[1]+'" x2="'+str(a) + '" y2="'+ ords[3] + '" style=" stroke:#D9D9D9"/>'
 		# Le texte des abscisses
 		y_text = str(y_abc + 16)		# position verticale du texte
-		svg += '<text x="'+str(a+4)+'" y="'+y_text+'"  style="text-anchor:end" letter-spacing="15px" transform="rotate(-45,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
+		svg += '<text x="'+str(a+4)+'" y="'+y_text+'"  style="text-anchor:end" transform="rotate(-45,'+str(a)+','+y_text+')">'+x_text[i]+'</text>'
 	# les positions des chemins
 	for i, chemin in enumerate(chemins):								# Pour chaque chemin
-		svg += '<path d="M '
+		svg += '<path id="'+nom_path[i]+'" onclick="enforce_path(evt); return false" d="M '
 		for j,val in enumerate(chemin):									# pour chaque position
 			if j != 0:
 				svg += ' L '
 			svg += str(pos_abc[j])+','+val + ' '
-		svg += '" style="stroke:grey; fill:none" />'
+		svg += '" style="stroke:grey; fill:none" stroke-width="4" >'
+		#svg += '<set attributeName="stroke-width" to="4" />'
+		svg += '</path>'
 	
 	################# ICI ON TERMINE LA DEFINITION DU SVG #####################
 	svg += '</svg>'									# la fin du fichier SVG
@@ -184,10 +178,11 @@ print("""
 <section>
 <article>
 <h1>Kinetic</h1>
+	
 <p>
 	Représente des fréquences alléliques variantes détectées  par patient, dans plusieurs échantillons séquentiels,
 	sous forme de graphique d'évolution clonale.<br/> 
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample-kinetic.csv" download="sample-kinetic.csv" id="upload_file" >sample_kinetic.csv</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample-kinetic.csv" download="sample-kinetic.csv" id="upload_file" >sample-kinetic.csv</a>
 </p>
 <br />
 """)
@@ -204,7 +199,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 	# définit le nom et emplacement du graphique png
 	png_path = "../graphics/" + fichier + ".png"
 	png_file = fichier + ".png"
-	# définie le nom et emplacement du graphique png
+	# définit le nom et emplacement du graphique svg
 	svg_path = "../graphics/" + fichier + ".svg"
 	svg_file = fichier + ".svg"	
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
@@ -215,7 +210,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':			# si la méthode est 'POST'
 		texte = common.parse_kinetic(texte)			# on analyse le fichier
 		svg = calcule_svg1(texte)					# on crée le fichier svg1
 		print(svg)									# AFFICHER LE SVG
-		
+		common.build_png_file(svg, png_path)		# créer un fichier PNG
+		common.upload_png(png_path, png_file)		# créer le lien de téléchargement de ce PNG
 		#debug(texte)								# pour debugguer
 
 		

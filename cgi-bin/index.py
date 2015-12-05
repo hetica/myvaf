@@ -186,7 +186,7 @@ print("""
 <h1>MyVAF</h1>
 <p>
 	Affiche un graphique de la fréquence des allèles variants pour un échantilon.<br/>
-	Un fichier d'exemple est téléchargeable : <a href="/static/sample-myvaf.txt" download="sample-myvaf.txt" id="upload_file" >sample_myvaf.txt</a>
+	Un fichier d'exemple est téléchargeable : <a href="/static/sample-myvaf.txt" download="sample-myvaf.txt" id="upload_file" >sample-myvaf.txt</a>
 </p>
 <br />
 """)
@@ -207,7 +207,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	# définit le nom et emplacement du graphique png
 	png_path = "../graphics/" + fichier + ".png"
 	png_file = fichier + ".png"
-	# définit le nom et emplacement du graphique png
+	# définit le nom et emplacement du graphique svg
 	svg_path = "../graphics/" + fichier + ".svg"
 	svg_file = fichier + ".svg"	
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
@@ -218,8 +218,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		texte = common.parse_myvaf(texte)		# on analyse on fichier
 		svg = calcule_svg1(texte)				# on crée le fichier svg1
 		print(svg)								# AFFICHER LE SVG
-		build_png_file(svg, png_path)			# créer un fichier PNG (pas au point)
-		upload_png(png_path)					# créer le lien de téléchargement de ce PNG
+		common.build_png_file(svg, png_path)	# créer un fichier PNG (pas au point)
+		common.upload_png(png_path, png_file)	# créer le lien de téléchargement de ce PNG
 		#build_svg_file(svg, svg_path)			# créer un fichier SVG
 		#upload_svg(svg_path)					# créer le lien de téléchargement de ce SVG
 		#debug(texte)							# pour debugguer

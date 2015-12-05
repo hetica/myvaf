@@ -138,7 +138,8 @@ section {
 
 article a {
 	text-decoration: none ;
-	color: #3D3D3D	;
+	//color: #3D3D3D ;
+	color: #AE2020 ;
 	padding: 2px 10px 2px 10px ;
 	border-radius: 10px ;
 	transition: background 1s ;
@@ -185,9 +186,8 @@ aside {
 
 aside .infos {
 	/*display: inline-block;*/
-	background: linear-gradient( #E5EEDF, #CAEEC3  ) ;
+	background: linear-gradient( #E5EEDF, #CAEEC3 ) ;
 	border: 1px groove green ;
-	border-radius: 10px ;
 	box-shadow: 0 0 8px rgba(75, 160, 85, 0.7) ;
 	margin: 20px 10px ; 
 	padding: 7px ;
@@ -247,7 +247,7 @@ input[type=button] {
     border-radius: 10px ;
 	}
 
-input[type=submit], #upload_file {
+input[type=submit] {
     background: -moz-linear-gradient(#ffffff, #dfdfdf);
     background: -ms-linear-gradient(#ffffff, #dfdfdf);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #dfdfdf));
@@ -262,10 +262,34 @@ input[type=submit], #upload_file {
     padding:1px 7px ;
 	}
 
-input[type=submit] {
-	/*display: none ;*/
+
+#upload-file-container {
+	background: #D1514B ;
+	border-radius: 10px ;
+	width: 160px;
+	height: 55px;
+	color: white;
+	text-align : center ;
+	line-height: 55px ;
+	position: relative ;
+	transition: background 0.7s ;
 }
 
-input[type="file"] {
-	padding-right: 100px ;
-	}
+#upload-file-container:hover {
+	background: #A62E29 ;
+}
+
+#upload-file-container input[type="file"] {
+	font-size: 80px ;
+	opacity: 0 ;
+	border-radius: 10px ;
+	background: #CA4E49 ;
+    width: 160px;
+    height: 55px;
+    overflow: hidden;
+    position: absolute ;
+    left: 0 ;
+    cursor: pointer;
+}
+
+

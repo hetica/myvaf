@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 #! -*- coding:utf-8 -*-
 
+import cairosvg
+
 def formulaire(cgi_fic):
 	print('<form enctype="multipart/form-data" method="post" action="/cgi-bin/' + cgi_fic + '">')
 	print("""
-		<label for="image_file">Sélectionner un fichier :</label><br />
-		<input type="file" onChange="this.form.submit()" name="fichier_csv"> 
-	</form><br/>
+		<!--<label for="image_file">Sélectionner un fichier :</label><br />-->
+		<div id="upload-file-container">
+			Télécharger
+			<input type="file" onChange="this.form.submit()" name="fichier_csv" />
+		</div>
+		</form>
+		<br/>
 	""")
+
+
+
 
 def parse_myvaf(texte):
 	"""
@@ -49,8 +58,8 @@ def parse_kinetic(texte):
 		texte[i] = line.split(";")
 	
 	items = []
-	for i,champs in enumerate(texte[0]):					# déterminer les champs utiles
-		if "-CCF" in champs or i == 0:
+	for i,champs in enumerate(texte[0]):					# détermine les champs utiles
+		if "-CCF" in champs or i == 0:						# Les champs utiles doivent contenir "-CCF"
 			items.append(i)
 	
 	tab_text = []											# tab_text = texte avec les champs utiles
@@ -62,3 +71,18 @@ def parse_kinetic(texte):
 		tab_text.append(l)
 
 	return tab_text
+
+
+def build_png_file(svg, png):
+	"""
+	Crée un fichier png pour le téléchargement
+	"""	
+	#png = cairosvg.svg2png(bytestring = svg)
+	cairosvg.svg2png(bytestring=bytes(svg,'UTF-8'), write_to = png)
+
+def upload_png(png_path, png_file):
+	"""
+	Affiche le lien de téléchargement du fichier png
+	"""
+	# print("<p>"+png_file+"</p>")
+	print('<br /><a href="' + png_path + '" download="' + png_file + '" id="upload_file" >Télécharger le graphique<a>' )
