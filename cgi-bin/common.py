@@ -4,17 +4,16 @@
 import cairosvg
 
 def formulaire(cgi_fic):
-	print('<form enctype="multipart/form-data" method="post" action="/cgi-bin/' + cgi_fic + '">')
+	print('<form enctype="multipart/form-data" onsubmit="test()" method="post" action="/cgi-bin/' + cgi_fic + '">')
 	print("""
-		<!--<label for="image_file">Sélectionner un fichier :</label><br />-->
 		<div id="upload-file-container">
 			Télécharger
-			<input type="file" onChange="this.form.submit()" name="fichier_csv" />
+			<!--<input type="file" onChange="this.form.submit()" name="fichier_csv" />-->
+			<input type="file" onChange="checkFile(this.form, this.form.fichier_csv.value)" name="fichier_csv" />
 		</div>
 		</form>
 		<br/>
 	""")
-
 
 def file_format(texte):
 	# MET EN UNICODE

@@ -11,7 +11,7 @@ Bref, tout un tas de trucs qui ne seront peut être jamais fait
 
 - Contrôle de la taille du fichier ( 5 Mo > taille > 0)
 
-- Contrôle du type de fichier (pas binaire/image/etc)(javascript)
+- Contrôle du type de fichier (pas binaire/image/etc)
 	
 - Afficher un message lorsque le fichier n'est pas correctement formaté
 

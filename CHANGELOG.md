@@ -1,10 +1,15 @@
+### Version 0.5
+Le 08/12/2105
+
+- Contrôle l'extension du fichier avant téléchargement
+
 ### Version 0.4
 Le 05/12/2015
 
 - kinetik : différencie les chemins (pointillés)
-- remplace les virgules par des points (erreur float)
-- intègre la première colonne (del5q)
-- ajoute un cartouche comme deuxième image
+- kinetik : remplace les virgules par des points (erreur float)
+- kinetik : intègre la première colonne (del5q)
+- kinetik : ajoute un cartouche comme deuxième image
 
 ### Version 0.3
 Le 03/12/2015

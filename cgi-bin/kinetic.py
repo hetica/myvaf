@@ -158,6 +158,7 @@ def cartouche(texte):
 			line = line.split(";")
 			mark = line[1].split(")")[0]+")"			# marqueur (chemin 1, grisé pâle) (ex: del(5q))
 			hrm = line[2].split(" ")[0]+"-CCF"			# high risk (les autres chemins) (ex: TP53-CCF)
+			#hrm = line[2].split(" ")[0]+"-VAF"			# high risk (les autres chemins) (ex: TP53 VAF)
 			for field in line:							# nombre de chemins
 				if "-CCF" in field:
 					nb_chemins += 1				
