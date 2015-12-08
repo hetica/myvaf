@@ -1,7 +1,9 @@
 ### Version 0.5
 Le 08/12/2105
 
+- Un peu de nettoyage de code
 - Contrôle l'extension du fichier avant téléchargement
+- Change les fichiers d'exemple
 
 ### Version 0.4
 Le 05/12/2015

@@ -11,10 +11,10 @@ Liens :
 import os, sys
 import cgi
 import cgitb; cgitb.enable() 								# Affiche les erreurs dans le browser
-import cairosvg												# pour générer un graphique au format png
+# import cairosvg												# pour générer un graphique au format png
 import common
 
-form = cgi.FieldStorage()
+form = cgi.FieldStorage()									# Récupère le contenu du formulaire
 
 def file_check_ok(texte):
 	"""
@@ -106,7 +106,7 @@ def calcule_svg1(texte):
 		svg += '<animate attributeName="y2" from="'+str(ord1)+'" to="'+str(Y2)+ '" begin="0s" dur="2s" />'
 		svg += '</line>'
 		svg += '<text x="'+str(X) + '" y="' + str(ord1 + 20) + '" style="text-anchor:middle">' + a[0] + '</text>'
-		svg += '<ellipse cx="'+str(X+23)+'" cy="'+str(Y2-15)+'" rx="'+str(len(a[3])*8)+'" ry="14" style="fill:white; stroke-width:1; stroke:transparent"/>'
+		svg += '<ellipse cx="'+str(X+23)+'" cy="'+str(Y2-15)+'" rx="'+str(len(a[3])*5)+'" ry="14" style="fill:white; stroke-width:1; stroke:transparent"/>'
 		#svg += '<set attributeName="fill" to="white" begin="2" />'
 		#svg += '<set attributeName="stroke" to="grey" begin="2" /></ellipse>'
 		svg += '<text x="'+str(X+23) + '" y="' + str(Y2-15) + '" style="text-anchor:middle; fill:grey; dominant-baseline:middle">' + a[3]
@@ -160,8 +160,6 @@ print("""
 
 common.formulaire("myvaf.py")
 
-#formulaire()
-
 if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 		
 	fileitem = form['fichier_csv']
@@ -175,15 +173,15 @@ if os.environ['REQUEST_METHOD'] == 'POST':		# si la méthode est 'POST'
 	png_path = "../graphics/" + fichier + ".png"
 	png_file = fichier + ".png"
 	# définit le nom et emplacement du graphique svg
-	svg_path = "../graphics/" + fichier + ".svg"
-	svg_file = fichier + ".svg"	
+	#svg_path = "../graphics/" + fichier + ".svg"
+	#svg_file = fichier + ".svg"	
 	print("<h4>{}</h4>".format(fileitem.filename))	# on affiche le nom du fichier
 		
 	texte = fileitem.file.read()				# on passe dans la variable texte la partie texte
 	texte = common.file_format(texte)			# mettre le fichier en unicode
 	if file_check_ok(texte):					# Si le controle du format de fichier est OK
 		texte = common.parse_myvaf(texte)		# on analyse on fichier
-		svg = calcule_svg1(texte)				# on crée le fichier svg1
+		svg = calcule_svg1(texte)				# on crée le graphique svg1
 		print(svg)								# AFFICHER LE SVG
 		common.build_png_file(svg, png_path)	# créer un fichier PNG
 		common.upload_png(png_path, png_file)	# créer le lien de téléchargement de ce PNG

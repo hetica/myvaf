@@ -3,6 +3,7 @@
 
 import cairosvg
 
+
 def formulaire(cgi_fic):
 	print('<form enctype="multipart/form-data" onsubmit="test()" method="post" action="/cgi-bin/' + cgi_fic + '">')
 	print("""
@@ -18,18 +19,18 @@ def formulaire(cgi_fic):
 def file_format(texte):
 	# MET EN UNICODE
 	try:
-		t = texte.decode("utf-8")
+		t = texte.decode("utf-8")							# Pour téléchargement depuis Linux
 	except:
-		t = texte.decode("ISO-8859-1")
+		t = texte.decode("ISO-8859-1")						# Pour téléchargement depuis Windows
 	# REMPLACE LES VIRGULES PAR DES POINTS
-	t = t.replace(",", ".")
+	t = t.replace(",", ".")									# remplace les virgules par des points  (float)
 	return t
 
 def parse_myvaf(texte):
 	"""
-	découper le fichier en autant de lignes / champs
+	découpe le fichier en autant de lignes / champs
 	input : le fichier
-	output : liste [ [ligne1, champs1], [ligne2, champs2], etc. ]
+	output : liste [ [champs1, champs2], [champs1, champs2], etc. ]
 	"""
 	
 	texte = texte.split("\n")								# Sépare la chaine en liste de lignes
@@ -71,14 +72,14 @@ def parse_kinetic(texte):
 		if "-CCF" in champs or i == 0:						# Les champs utiles doivent contenir "-CCF"
 			items.append(i)
 	
-	tab_text = []											# tab_text = texte avec les champs utiles
+	tab_text = []											# tab_text = tous les champs utiles sont récupérés
 	for i, ligne in enumerate(texte):
 		l = []
 		for j, champs in enumerate(ligne):
 			 if j in items:
 				 l.append(champs)
 		tab_text.append(l)
-		
+	
 	return tab_text
 
 

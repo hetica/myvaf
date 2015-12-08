@@ -1,6 +1,6 @@
 
 function test (form) {
-	alert('GLOP');
+	alert('TEST OK !');
 }
 
 function checkFile (form, file) {
